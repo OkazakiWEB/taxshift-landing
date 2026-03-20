@@ -22,6 +22,7 @@
 html{scroll-behavior:smooth;font-size:16px;}
 html{overflow-x:clip;}
 html.modal-open{overflow:hidden;}
+html.modal-open nav{z-index:1;}
 body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--ink);overflow-x:clip;-webkit-font-smoothing:antialiased;}
 
 /* ── SCROLLBAR ── */
