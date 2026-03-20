@@ -4,877 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TaxShift — O CRM Tributário para Escritórios Contábeis</title>
-<meta name="description" content="Simule o impacto da reforma tributária para seus clientes em segundos. Checklist de compliance, painel do cliente, relatórios com IA. Teste 14 dias grátis.">
+<meta name="description" content="Simule o impacto da reforma tributária para seus clientes em segundos. Checklist de compliance, painel do cliente, relatórios com IA. Teste 7 dias grátis.">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#fafaf8;
-  --ink:#0d0e11;
-  --ink2:#23252c;
-  --ink3:#6b7280;
-  --ink4:#9ca3af;
-  --line:#e5e7eb;
-  --line2:#f3f4f6;
-  --gold:#c49a2a;
-  --gold-bg:#fefce8;
-  --gold-border:#fde68a;
-  --green:#16a34a;
-  --green-bg:#f0fdf4;
-  --blue:#2563eb;
-  --red:#dc2626;
-  --white:#ffffff;
-  --r:10px;
-  --max:1160px;
-}
-
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;font-size:16px;}
-body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
-
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar{width:4px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:var(--line);border-radius:2px;}
-
-/* ── GRAIN OVERLAY ── */
-body::before{
-  content:'';position:fixed;inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events:none;z-index:0;opacity:.4;
-}
-
-/* ── LAYOUT ── */
-.wrap{max-width:var(--max);margin:0 auto;padding:0 24px;position:relative;z-index:1;}
-
-/* ── NAV ── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  padding:0 24px;
-  background:rgba(250,250,248,.88);
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid var(--line);
-}
-.nav-inner{
-  max-width:var(--max);margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;
-  height:60px;
-}
-.nav-logo{
-  font-family:'Instrument Serif',serif;
-  font-size:22px;
-  color:var(--ink);
-  text-decoration:none;
-  display:flex;align-items:center;gap:6px;
-}
-.nav-logo span{color:var(--gold);}
-.nav-logo sup{
-  font-family:'Geist',sans-serif;
-  font-size:10px;font-weight:700;
-  background:var(--ink);color:var(--white);
-  padding:1px 5px;border-radius:3px;
-  letter-spacing:.06em;vertical-align:super;
-}
-.nav-links{display:flex;align-items:center;gap:28px;}
-.nav-links a{
-  font-size:13.5px;font-weight:400;
-  color:var(--ink3);text-decoration:none;
-  transition:color .15s;
-}
-.nav-links a:hover{color:var(--ink);}
-.nav-cta{display:flex;align-items:center;gap:10px;}
-.btn-ghost{
-  font-size:13px;font-weight:500;
-  color:var(--ink2);text-decoration:none;
-  padding:7px 16px;border-radius:7px;
-  border:1px solid var(--line);
-  transition:all .15s;
-}
-.btn-ghost:hover{border-color:var(--ink3);color:var(--ink);}
-.btn-primary{
-  font-size:13px;font-weight:600;
-  color:var(--white);
-  background:var(--ink);
-  padding:8px 18px;border-radius:7px;
-  text-decoration:none;
-  transition:all .2s;
-  white-space:nowrap;
-}
-.btn-primary:hover{background:var(--ink2);transform:translateY(-1px);box-shadow:0 4px 12px rgba(13,14,17,.2);}
-
-/* ── HERO ── */
-.hero{
-  padding:148px 0 100px;
-  text-align:center;
-  position:relative;
-}
-.hero::before{
-  content:'';
-  position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:800px;height:500px;
-  background:radial-gradient(ellipse at 50% 30%,rgba(196,154,42,.08) 0%,transparent 65%);
-  pointer-events:none;
-}
-.hero-badge{
-  display:inline-flex;align-items:center;gap:8px;
-  background:var(--gold-bg);
-  border:1px solid var(--gold-border);
-  border-radius:20px;
-  padding:5px 14px;
-  margin-bottom:28px;
-  font-size:12px;font-weight:600;
-  color:var(--gold);
-  letter-spacing:.04em;
-}
-.hero-badge::before{
-  content:'';width:6px;height:6px;border-radius:50%;
-  background:var(--gold);
-  box-shadow:0 0 8px rgba(196,154,42,.6);
-  animation:pulse 2s infinite;
-}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-
-.hero h1{
-  font-family:'Instrument Serif',serif;
-  font-size:clamp(38px,6vw,72px);
-  font-weight:400;
-  line-height:1.08;
-  letter-spacing:-.02em;
-  color:var(--ink);
-  max-width:820px;
-  margin:0 auto 22px;
-}
-.hero h1 em{
-  font-style:italic;
-  color:var(--gold);
-}
-.hero p{
-  font-size:clamp(15px,2vw,18px);
-  color:var(--ink3);
-  max-width:540px;
-  margin:0 auto 40px;
-  line-height:1.7;
-  font-weight:300;
-}
-.hero-ctas{
-  display:flex;align-items:center;justify-content:center;
-  gap:12px;flex-wrap:wrap;margin-bottom:52px;
-}
-.btn-hero{
-  font-size:15px;font-weight:600;
-  color:var(--white);
-  background:var(--ink);
-  padding:13px 28px;border-radius:9px;
-  text-decoration:none;
-  transition:all .2s;
-  display:inline-flex;align-items:center;gap:8px;
-}
-.btn-hero:hover{background:var(--ink2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(13,14,17,.2);}
-.btn-hero-outline{
-  font-size:15px;font-weight:500;
-  color:var(--ink2);
-  background:transparent;
-  padding:13px 28px;border-radius:9px;
-  text-decoration:none;
-  border:1.5px solid var(--line);
-  transition:all .2s;
-}
-.btn-hero-outline:hover{border-color:var(--ink3);color:var(--ink);}
-.hero-note{font-size:12px;color:var(--ink4);margin-top:14px;}
-.hero-note strong{color:var(--green);font-weight:600;}
-
-/* ── HERO VISUAL ── */
-.hero-visual{
-  max-width:900px;margin:0 auto;
-  background:var(--white);
-  border:1px solid var(--line);
-  border-radius:16px;
-  box-shadow:0 24px 80px rgba(13,14,17,.1),0 1px 0 rgba(255,255,255,.8) inset;
-  overflow:hidden;
-}
-.hv-bar{
-  background:var(--line2);
-  border-bottom:1px solid var(--line);
-  padding:10px 16px;
-  display:flex;align-items:center;gap:6px;
-}
-.hv-dot{width:10px;height:10px;border-radius:50%;}
-.hv-url{
-  margin-left:8px;flex:1;
-  background:var(--white);
-  border:1px solid var(--line);
-  border-radius:5px;
-  padding:4px 10px;
-  font-family:'Geist Mono',monospace;
-  font-size:11px;
-  color:var(--ink3);
-  text-align:center;
-}
-.hv-body{padding:28px;text-align:left;}
-
-/* Dashboard preview inside hero */
-.dash-preview{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;margin-bottom:16px;}
-.dp-kpi{
-  background:var(--bg);border:1px solid var(--line);
-  border-radius:8px;padding:12px 14px;
-}
-.dp-kpi-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink4);margin-bottom:6px;}
-.dp-kpi-val{font-family:'Geist Mono',monospace;font-size:20px;font-weight:600;color:var(--ink);}
-.dp-kpi-sub{font-size:10px;color:var(--ink4);margin-top:3px;}
-.dp-kpi.green .dp-kpi-val{color:var(--green);}
-.dp-kpi.red .dp-kpi-val{color:var(--red);}
-.dp-kpi.gold .dp-kpi-val{color:var(--gold);}
-
-.dash-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.dp-card{
-  background:var(--bg);border:1px solid var(--line);
-  border-radius:8px;padding:14px;
-}
-.dp-card-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink4);margin-bottom:10px;}
-.dp-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
-.dp-bar-lbl{font-size:10px;color:var(--ink3);width:80px;flex-shrink:0;}
-.dp-bar-track{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden;}
-.dp-bar-fill{height:100%;border-radius:3px;}
-.dp-bar-val{font-family:'Geist Mono',monospace;font-size:10px;color:var(--ink3);width:36px;text-align:right;}
-
-.dp-cl-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line);font-size:11px;}
-.dp-cl-row:last-child{border-bottom:none;}
-.dp-cl-name{color:var(--ink2);font-weight:500;}
-.dp-cl-tag{font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;}
-.tag-ok{background:var(--green-bg);color:var(--green);}
-.tag-w{background:#fef9c3;color:#a16207;}
-.tag-r{background:#fef2f2;color:var(--red);}
-
-/* ── SOCIAL PROOF ── */
-.social-proof{
-  border-top:1px solid var(--line);
-  border-bottom:1px solid var(--line);
-  padding:28px 0;
-  text-align:center;
-}
-.sp-label{font-size:12px;color:var(--ink4);margin-bottom:20px;letter-spacing:.05em;text-transform:uppercase;font-weight:500;}
-.sp-logos{
-  display:flex;align-items:center;justify-content:center;
-  gap:40px;flex-wrap:wrap;
-}
-.sp-logo{
-  font-family:'Instrument Serif',serif;
-  font-size:16px;color:var(--ink4);
-  opacity:.5;letter-spacing:-.3px;
-}
-
-/* ── SECTION ── */
-section{padding:96px 0;}
-.section-tag{
-  display:inline-block;
-  font-size:11px;font-weight:700;
-  text-transform:uppercase;letter-spacing:.12em;
-  color:var(--gold);
-  margin-bottom:14px;
-}
-.section-h{
-  font-family:'Instrument Serif',serif;
-  font-size:clamp(28px,4vw,48px);
-  font-weight:400;
-  line-height:1.15;
-  letter-spacing:-.02em;
-  color:var(--ink);
-  margin-bottom:16px;
-}
-.section-h em{font-style:italic;color:var(--gold);}
-.section-sub{
-  font-size:16px;color:var(--ink3);
-  line-height:1.7;font-weight:300;
-  max-width:520px;
-}
-
-/* ── PROBLEMA ── */
-.problem-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:40px;
-  align-items:center;
-  margin-top:56px;
-}
-.problem-list{display:flex;flex-direction:column;gap:18px;}
-.prob-item{
-  display:flex;gap:14px;
-  padding:18px 20px;
-  background:var(--white);
-  border:1px solid var(--line);
-  border-radius:10px;
-  transition:border-color .2s,box-shadow .2s;
-}
-.prob-item:hover{border-color:var(--red);box-shadow:0 4px 16px rgba(220,38,38,.06);}
-.prob-icon{
-  width:36px;height:36px;
-  border-radius:8px;
-  background:#fef2f2;
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;flex-shrink:0;
-}
-.prob-text h4{font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:4px;}
-.prob-text p{font-size:12px;color:var(--ink3);line-height:1.6;}
-
-.solution-box{
-  background:var(--ink);
-  border-radius:16px;
-  padding:36px;
-  color:var(--white);
-}
-.solution-box h3{
-  font-family:'Instrument Serif',serif;
-  font-size:26px;font-style:italic;
-  margin-bottom:20px;
-  line-height:1.2;
-  color:var(--white);
-}
-.sol-item{
-  display:flex;align-items:flex-start;gap:10px;
-  margin-bottom:14px;
-  font-size:13px;
-  line-height:1.6;
-  color:rgba(255,255,255,.75);
-}
-.sol-check{
-  width:20px;height:20px;
-  border-radius:50%;
-  background:rgba(196,154,42,.2);
-  border:1px solid rgba(196,154,42,.4);
-  display:flex;align-items:center;justify-content:center;
-  font-size:10px;flex-shrink:0;
-  margin-top:1px;
-  color:var(--gold);
-}
-.sol-cta{
-  margin-top:28px;
-  display:inline-flex;align-items:center;gap:8px;
-  background:var(--gold);
-  color:var(--ink);
-  font-weight:700;font-size:13px;
-  padding:11px 22px;border-radius:8px;
-  text-decoration:none;
-  transition:all .2s;
-}
-.sol-cta:hover{background:#d4a843;transform:translateY(-1px);}
-
-/* ── FEATURES ── */
-.features-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:20px;
-  margin-top:56px;
-}
-.feat-card{
-  background:var(--white);
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:26px;
-  transition:all .22s;
-  position:relative;
-  overflow:hidden;
-}
-.feat-card::before{
-  content:'';
-  position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,transparent,var(--gold),transparent);
-  opacity:0;transition:opacity .2s;
-}
-.feat-card:hover{border-color:rgba(196,154,42,.3);box-shadow:0 8px 28px rgba(13,14,17,.07);transform:translateY(-2px);}
-.feat-card:hover::before{opacity:1;}
-.feat-icon{
-  width:42px;height:42px;border-radius:10px;
-  background:var(--bg);border:1px solid var(--line);
-  display:flex;align-items:center;justify-content:center;
-  font-size:18px;margin-bottom:16px;
-}
-.feat-card h3{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px;letter-spacing:-.2px;}
-.feat-card p{font-size:12.5px;color:var(--ink3);line-height:1.65;}
-.feat-tag{
-  display:inline-block;
-  font-size:10px;font-weight:700;
-  text-transform:uppercase;letter-spacing:.06em;
-  padding:2px 8px;border-radius:4px;
-  margin-top:12px;
-}
-.ft-new{background:var(--gold-bg);color:var(--gold);}
-.ft-pro{background:#ede9fe;color:#7c3aed;}
-.ft-all{background:var(--green-bg);color:var(--green);}
-
-/* ── HOW IT WORKS ── */
-.hiw-bg{background:var(--ink);}
-.hiw-bg .section-tag{color:rgba(196,154,42,.8);}
-.hiw-bg .section-h{color:var(--white);}
-.hiw-bg .section-h em{color:var(--gold);}
-.hiw-bg .section-sub{color:rgba(255,255,255,.5);}
-
-.hiw-steps{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:2px;
-  margin-top:56px;
-}
-.hiw-step{
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:12px;
-  padding:28px 24px;
-  position:relative;
-}
-.hiw-num{
-  font-family:'Geist Mono',monospace;
-  font-size:11px;font-weight:600;
-  color:var(--gold);
-  letter-spacing:.1em;
-  margin-bottom:16px;
-}
-.hiw-step h3{
-  font-size:15px;font-weight:600;
-  color:var(--white);
-  margin-bottom:8px;letter-spacing:-.2px;
-}
-.hiw-step p{font-size:12px;color:rgba(255,255,255,.45);line-height:1.7;}
-.hiw-arrow{
-  position:absolute;top:50%;right:-14px;
-  transform:translateY(-50%);
-  font-size:16px;color:rgba(255,255,255,.15);
-  z-index:1;
-}
-
-/* ── PLANOS ── */
-.plans-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:16px;
-  margin-top:56px;
-  align-items:start;
-}
-.plan-card{
-  background:var(--white);
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:28px;
-  position:relative;
-}
-.plan-card.featured{
-  background:var(--ink);
-  border-color:var(--ink);
-  transform:scale(1.03);
-  box-shadow:0 20px 60px rgba(13,14,17,.2);
-}
-.plan-badge{
-  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
-  background:var(--gold);color:var(--ink);
-  font-size:10px;font-weight:700;
-  letter-spacing:.08em;text-transform:uppercase;
-  padding:3px 14px;border-radius:20px;
-  white-space:nowrap;
-}
-.plan-name{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--ink3);margin-bottom:8px;}
-.plan-card.featured .plan-name{color:rgba(255,255,255,.5);}
-.plan-price{
-  display:flex;align-items:baseline;gap:4px;
-  margin-bottom:6px;
-}
-.plan-currency{font-size:14px;font-weight:600;color:var(--ink3);margin-top:6px;}
-.plan-card.featured .plan-currency{color:rgba(255,255,255,.5);}
-.plan-amount{
-  font-family:'Geist Mono',monospace;
-  font-size:40px;font-weight:700;
-  color:var(--ink);letter-spacing:-1px;
-}
-.plan-card.featured .plan-amount{color:var(--white);}
-.plan-period{font-size:12px;color:var(--ink4);margin-top:4px;font-weight:400;}
-.plan-card.featured .plan-period{color:rgba(255,255,255,.35);}
-.plan-desc{font-size:12px;color:var(--ink3);margin-bottom:20px;line-height:1.6;}
-.plan-card.featured .plan-desc{color:rgba(255,255,255,.45);}
-.plan-divider{height:1px;background:var(--line);margin:18px 0;}
-.plan-card.featured .plan-divider{background:rgba(255,255,255,.1);}
-.plan-features{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
-.pf-item{display:flex;align-items:flex-start;gap:9px;font-size:12.5px;color:var(--ink2);}
-.plan-card.featured .pf-item{color:rgba(255,255,255,.8);}
-.pf-icon{font-size:13px;flex-shrink:0;margin-top:1px;}
-.pf-item.disabled{color:var(--ink4);text-decoration:line-through;}
-.plan-card.featured .pf-item.disabled{color:rgba(255,255,255,.25);}
-.plan-btn{
-  display:block;text-align:center;text-decoration:none;
-  font-size:13px;font-weight:600;
-  padding:11px;border-radius:8px;
-  transition:all .2s;
-}
-.plan-btn-outline{
-  border:1.5px solid var(--line);color:var(--ink);
-}
-.plan-btn-outline:hover{border-color:var(--ink3);}
-.plan-btn-solid{
-  background:var(--gold);color:var(--ink);
-}
-.plan-btn-solid:hover{background:#d4a843;transform:translateY(-1px);box-shadow:0 4px 14px rgba(196,154,42,.3);}
-.plan-btn-white{
-  background:var(--white);color:var(--ink);
-}
-.plan-btn-white:hover{background:var(--bg);transform:translateY(-1px);}
-
-.plan-clients-limit{
-  font-family:'Geist Mono',monospace;
-  font-size:11px;color:var(--ink4);
-  margin-bottom:4px;letter-spacing:.04em;
-}
-.plan-card.featured .plan-clients-limit{color:rgba(255,255,255,.35);}
-
-/* ── TESTIMONIALS ── */
-.testi-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:16px;
-  margin-top:56px;
-}
-.testi-card{
-  background:var(--white);
-  border:1px solid var(--line);
-  border-radius:12px;
-  padding:24px;
-}
-.testi-stars{color:var(--gold);font-size:14px;margin-bottom:14px;letter-spacing:2px;}
-.testi-text{
-  font-size:13.5px;color:var(--ink2);
-  line-height:1.7;font-style:italic;
-  margin-bottom:18px;
-}
-.testi-author{display:flex;align-items:center;gap:10px;}
-.testi-avatar{
-  width:36px;height:36px;border-radius:50%;
-  background:var(--ink);color:var(--white);
-  display:flex;align-items:center;justify-content:center;
-  font-size:13px;font-weight:700;font-family:'Instrument Serif',serif;
-  flex-shrink:0;
-}
-.testi-name{font-size:12px;font-weight:600;color:var(--ink);}
-.testi-role{font-size:11px;color:var(--ink4);}
-
-/* ── FAQ ── */
-.faq-list{margin-top:48px;max-width:700px;}
-.faq-item{
-  border-bottom:1px solid var(--line);
-  padding:20px 0;
-  cursor:pointer;
-}
-.faq-q{
-  display:flex;align-items:center;justify-content:space-between;
-  font-size:14.5px;font-weight:500;color:var(--ink);
-  gap:16px;
-}
-.faq-icon{
-  width:24px;height:24px;border-radius:50%;
-  background:var(--line2);
-  display:flex;align-items:center;justify-content:center;
-  font-size:14px;color:var(--ink3);flex-shrink:0;
-  transition:all .2s;
-}
-.faq-item.open .faq-icon{background:var(--ink);color:var(--white);transform:rotate(45deg);}
-.faq-a{
-  font-size:13px;color:var(--ink3);line-height:1.75;
-  margin-top:12px;display:none;
-}
-.faq-item.open .faq-a{display:block;}
-
-/* ── CTA FINAL ── */
-.cta-section{
-  background:var(--ink);
-  border-radius:20px;
-  padding:72px 48px;
-  text-align:center;
-  position:relative;overflow:hidden;
-  margin:80px 0;
-}
-.cta-section::before{
-  content:'';position:absolute;
-  top:0;left:50%;transform:translateX(-50%);
-  width:600px;height:400px;
-  background:radial-gradient(ellipse at 50% 0%,rgba(196,154,42,.15) 0%,transparent 60%);
-  pointer-events:none;
-}
-.cta-section h2{
-  font-family:'Instrument Serif',serif;
-  font-size:clamp(28px,4vw,48px);
-  font-weight:400;font-style:italic;
-  color:var(--white);
-  margin-bottom:16px;
-  letter-spacing:-.02em;
-  position:relative;
-}
-.cta-section p{
-  font-size:16px;color:rgba(255,255,255,.5);
-  margin-bottom:36px;font-weight:300;
-  position:relative;
-}
-.cta-btns{
-  display:flex;align-items:center;justify-content:center;
-  gap:12px;flex-wrap:wrap;
-  position:relative;
-}
-.btn-cta-main{
-  font-size:15px;font-weight:700;
-  background:var(--gold);color:var(--ink);
-  padding:14px 32px;border-radius:9px;
-  text-decoration:none;
-  display:inline-flex;align-items:center;gap:8px;
-  transition:all .2s;
-}
-.btn-cta-main:hover{background:#d4a843;transform:translateY(-2px);box-shadow:0 8px 24px rgba(196,154,42,.3);}
-.btn-cta-ghost{
-  font-size:14px;font-weight:500;
-  color:rgba(255,255,255,.6);
-  padding:14px 24px;border-radius:9px;
-  text-decoration:none;
-  border:1px solid rgba(255,255,255,.1);
-  transition:all .2s;
-}
-.btn-cta-ghost:hover{border-color:rgba(255,255,255,.3);color:var(--white);}
-.cta-note{
-  font-size:12px;color:rgba(255,255,255,.3);
-  margin-top:18px;position:relative;
-}
-
-/* ── FOOTER ── */
-footer{
-  border-top:1px solid var(--line);
-  padding:40px 0;
-}
-.footer-inner{
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:20px;
-}
-.footer-logo{
-  font-family:'Instrument Serif',serif;
-  font-size:18px;color:var(--ink3);
-}
-.footer-logo span{color:var(--gold);}
-.footer-links{display:flex;gap:24px;}
-.footer-links a{font-size:12px;color:var(--ink4);text-decoration:none;}
-.footer-links a:hover{color:var(--ink3);}
-.footer-copy{font-size:11px;color:var(--ink4);}
-
-/* ── ANIMATIONS ── */
-.fade-up{
-  opacity:0;transform:translateY(24px);
-  transition:opacity .6s ease,transform .6s ease;
-}
-.fade-up.visible{opacity:1;transform:translateY(0);}
-
-/* ── RESPONSIVE ── */
-@media(max-width:900px){
-  .nav-links{display:none;}
-  .problem-grid,.hiw-steps,.features-grid,.plans-grid,.testi-grid{grid-template-columns:1fr;}
-  .plans-grid{gap:12px;}
-  .plan-card.featured{transform:none;}
-  .dash-preview{grid-template-columns:1fr 1fr;}
-  .dash-row{grid-template-columns:1fr;}
-  .hiw-arrow{display:none;}
-  .cta-section{padding:48px 24px;}
-  .hero{padding:110px 0 72px;}
-  section{padding:64px 0;}
-}
-@media(max-width:560px){
-  .dash-preview{grid-template-columns:1fr 1fr;}
-  .hv-body{padding:16px;}
-  .sp-logos{gap:24px;}
-}
-
-/* ══ MODALS & OVERLAYS ══ */
-.overlay{
-  position:fixed;inset:0;z-index:200;
-  background:rgba(13,14,17,.6);
-  backdrop-filter:blur(6px);
-  display:flex;align-items:center;justify-content:center;
-  padding:20px;
-  opacity:0;pointer-events:none;
-  transition:opacity .2s;
-}
-.overlay.show{opacity:1;pointer-events:auto;}
-.modal-box{
-  background:var(--white);
-  border-radius:16px;
-  padding:36px;
-  width:100%;max-width:440px;
-  box-shadow:0 32px 80px rgba(13,14,17,.2);
-  transform:translateY(16px);
-  transition:transform .25s cubic-bezier(.4,0,.2,1);
-  position:relative;
-}
-.overlay.show .modal-box{transform:translateY(0);}
-.modal-close{
-  position:absolute;top:16px;right:16px;
-  width:28px;height:28px;border-radius:50%;
-  background:var(--line2);border:none;cursor:pointer;
-  font-size:14px;color:var(--ink3);
-  display:flex;align-items:center;justify-content:center;
-  transition:background .15s;
-}
-.modal-close:hover{background:var(--line);}
-.modal-logo{
-  font-family:'Instrument Serif',serif;
-  font-size:20px;color:var(--ink);margin-bottom:6px;
-}
-.modal-logo span{color:var(--gold);}
-.modal-title{font-size:18px;font-weight:700;color:var(--ink);margin-bottom:4px;letter-spacing:-.3px;}
-.modal-sub{font-size:13px;color:var(--ink3);margin-bottom:24px;line-height:1.5;}
-.modal-input{
-  width:100%;padding:11px 14px;
-  border:1.5px solid var(--line);border-radius:8px;
-  font-family:'Geist',sans-serif;font-size:14px;color:var(--ink);
-  background:var(--bg);
-  outline:none;transition:border-color .15s;margin-bottom:10px;
-}
-.modal-input:focus{border-color:var(--ink);}
-.modal-input::placeholder{color:var(--ink4);}
-.modal-select{
-  width:100%;padding:11px 14px;
-  border:1.5px solid var(--line);border-radius:8px;
-  font-family:'Geist',sans-serif;font-size:14px;color:var(--ink);
-  background:var(--bg);outline:none;cursor:pointer;
-  appearance:none;margin-bottom:10px;
-  background-image:url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;
-}
-.modal-btn{
-  width:100%;padding:12px;border:none;border-radius:8px;
-  font-family:'Geist',sans-serif;font-size:14px;font-weight:700;
-  cursor:pointer;transition:all .2s;margin-top:4px;
-}
-.modal-btn-dark{background:var(--ink);color:var(--white);}
-.modal-btn-dark:hover{background:var(--ink2);transform:translateY(-1px);}
-.modal-btn-gold{background:var(--gold);color:var(--ink);}
-.modal-btn-gold:hover{background:#d4a843;transform:translateY(-1px);}
-.modal-divider{
-  display:flex;align-items:center;gap:10px;
-  font-size:11px;color:var(--ink4);margin:14px 0;
-}
-.modal-divider::before,.modal-divider::after{content:'';flex:1;height:1px;background:var(--line);}
-.google-btn{
-  width:100%;padding:11px;border:1.5px solid var(--line);border-radius:8px;
-  background:var(--white);font-family:'Geist',sans-serif;font-size:13px;font-weight:500;
-  color:var(--ink);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
-  transition:all .15s;text-decoration:none;
-}
-.google-btn:hover{border-color:var(--ink3);background:var(--bg);}
-.modal-footer{font-size:11px;color:var(--ink4);text-align:center;margin-top:16px;line-height:1.6;}
-.modal-footer a{color:var(--ink);font-weight:500;text-decoration:underline;cursor:pointer;}
-.plan-pill{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:5px 12px;border-radius:20px;margin-bottom:18px;
-  font-size:12px;font-weight:600;
-}
-.plan-pill.basico{background:var(--line2);color:var(--ink3);}
-.plan-pill.pro{background:#fefce8;color:var(--gold);}
-.plan-pill.enterprise{background:#ede9fe;color:#7c3aed;}
-.modal-trial-note{
-  background:var(--green-bg);border:1px solid #bbf7d0;
-  border-radius:8px;padding:10px 14px;
-  font-size:12px;color:var(--green);
-  display:flex;align-items:center;gap:8px;
-  margin-bottom:16px;font-weight:500;
-}
-.step-indicator{
-  display:flex;align-items:center;gap:6px;
-  margin-bottom:20px;
-}
-.step-dot{
-  width:8px;height:8px;border-radius:50%;
-  background:var(--line);transition:background .2s;
-}
-.step-dot.active{background:var(--ink);}
-.step-dot.done{background:var(--green);}
-.success-icon{
-  width:56px;height:56px;border-radius:50%;
-  background:var(--green-bg);border:2px solid #bbf7d0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:24px;margin:0 auto 16px;
-}
-
-/* ══ DEMO VIDEO MODAL ══ */
-.demo-box{max-width:720px;padding:0;overflow:hidden;background:var(--ink);}
-.demo-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.08);
-}
-.demo-header-title{font-size:13px;font-weight:600;color:rgba(255,255,255,.7);}
-.demo-close{
-  background:rgba(255,255,255,.08);border:none;color:rgba(255,255,255,.5);
-  width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;
-  display:flex;align-items:center;justify-content:center;transition:background .15s;
-}
-.demo-close:hover{background:rgba(255,255,255,.15);}
-.demo-content{padding:32px;text-align:center;}
-.demo-steps{
-  display:flex;flex-direction:column;gap:12px;
-  margin:24px 0;text-align:left;
-}
-.demo-step-item{
-  display:flex;gap:12px;align-items:flex-start;
-  padding:14px;background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.07);border-radius:8px;
-  cursor:pointer;transition:border-color .15s;
-}
-.demo-step-item:hover{border-color:rgba(196,154,42,.4);}
-.demo-step-num{
-  width:28px;height:28px;border-radius:50%;
-  background:rgba(196,154,42,.15);border:1px solid rgba(196,154,42,.3);
-  display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:700;color:var(--gold);flex-shrink:0;
-  font-family:'Geist Mono',monospace;
-}
-.demo-step-body h4{font-size:13px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:3px;}
-.demo-step-body p{font-size:11px;color:rgba(255,255,255,.4);line-height:1.5;}
-
-/* ══ WHATSAPP / CONTACT ══ */
-.wa-box{max-width:400px;}
-.wa-options{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
-.wa-option{
-  display:flex;align-items:center;gap:12px;
-  padding:14px;border:1.5px solid var(--line);border-radius:9px;
-  cursor:pointer;transition:all .18s;text-decoration:none;color:var(--ink);
-}
-.wa-option:hover{border-color:var(--green);background:var(--green-bg);}
-.wa-opt-icon{font-size:20px;width:36px;text-align:center;}
-.wa-opt-title{font-size:13px;font-weight:600;}
-.wa-opt-sub{font-size:11px;color:var(--ink3);}
-
-/* ══ TOAST ══ */
-.toast{
-  position:fixed;bottom:24px;right:24px;z-index:300;
-  background:var(--ink);color:var(--white);
-  padding:12px 18px;border-radius:9px;
-  font-size:13px;font-weight:500;
-  display:flex;align-items:center;gap:10px;
-  box-shadow:0 8px 24px rgba(13,14,17,.3);
-  transform:translateY(80px);opacity:0;
-  transition:all .3s cubic-bezier(.4,0,.2,1);
-  max-width:320px;
-}
-.toast.show{transform:translateY(0);opacity:1;}
-.toast-icon{font-size:16px;}
-
-/* ══ PAGE SECTIONS ══ */
-.page-section{display:none;}
-.page-section.active{display:block;}
-
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <!-- ══ NAV ══ -->
 <nav>
   <div class="nav-inner">
-    <a href="#" class="nav-logo" onclick="scrollToTop(event)">Tax<span>Shift</span> <sup>PRO</sup></a>
+    <a href="javascript:void(0)" class="nav-logo" onclick="scrollToTop(event)">Tax<span>Shift</span> <sup>PRO</sup></a>
     <div class="nav-links">
-      <a href="#funcionalidades">Funcionalidades</a>
-      <a href="#como-funciona">Como funciona</a>
+      <a href="javascript:void(0)" onclick="openModal(event,'demo')">Ver demo</a>
       <a href="#planos">Planos</a>
       <a href="#faq">FAQ</a>
     </div>
     <div class="nav-cta">
-      <a href="#" class="btn-ghost" onclick="openModal(event,'login')">Entrar</a>
-      <a href="#planos" class="btn-primary" onclick="scrollToPlanos(event)">Testar grátis →</a>
+      <a href="login.html" class="btn-ghost">Entrar</a>
+      <a href="cadastro.html?plano=pro" class="btn-primary">Testar grátis →</a>
     </div>
   </div>
 </nav>
@@ -882,17 +29,17 @@ footer{
 <!-- ══ HERO ══ -->
 <section class="hero">
   <div class="wrap">
-    <div class="hero-badge">Novo · Reforma Tributária EC 132/2023</div>
+    <div class="hero-badge" style="opacity:1;">Novo · Reforma Tributária EC 132/2023</div>
 
     <h1>O escritório que entende<br>a reforma <em>conquista</em> o cliente</h1>
 
     <p>TaxShift PRO é o CRM tributário que calcula o impacto real da reforma para cada cliente, gera relatórios com IA e entrega um painel exclusivo para o cliente acompanhar.</p>
 
     <div class="hero-ctas">
-      <a href="#" class="btn-hero" onclick="openModal(event,'cadastro','pro')">Começar 14 dias grátis →</a>
-      <a href="#" class="btn-hero-outline" onclick="openModal(event,'demo')">Ver como funciona</a>
+      <a href="cadastro.html?plano=pro" class="btn-hero">Começar 7 dias grátis →</a>
+      <a href="javascript:void(0)" class="btn-hero-outline" onclick="openModal(event,'demo')">Ver como funciona</a>
     </div>
-    <div class="hero-note"><strong>✓ Sem cartão de crédito</strong> &nbsp;·&nbsp; Cancele quando quiser &nbsp;·&nbsp; Setup em 5 minutos</div>
+    <div class="hero-note"><strong style="color:var(--green)">✓ Plano gratuito para sempre</strong> &nbsp;·&nbsp; 7 dias grátis nos planos pagos &nbsp;·&nbsp; Sem cartão</div>
 
     <!-- Dashboard preview -->
     <div class="hero-visual" style="margin-top:52px;">
@@ -997,74 +144,7 @@ footer{
         <div class="sol-item"><div class="sol-check">✓</div>Painel exclusivo para o cliente acompanhar em tempo real</div>
         <div class="sol-item"><div class="sol-check">✓</div>Alertas legislativos — saiba quais clientes são afetados por cada nova norma</div>
         <div class="sol-item"><div class="sol-check">✓</div>Modo Pitch para apresentar ao cliente em reunião — sem números técnicos</div>
-        <a href="#" class="sol-cta" onclick="openModal(event,'cadastro','basico')">Começar gratuitamente →</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ FUNCIONALIDADES ══ -->
-<section id="funcionalidades" style="background:var(--line2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
-  <div class="wrap">
-    <div class="fade-up" style="text-align:center;">
-      <div class="section-tag">Funcionalidades</div>
-      <h2 class="section-h">Tudo que o escritório precisa<br>para <em>liderar</em> a transição</h2>
-    </div>
-
-    <div class="features-grid fade-up">
-      <div class="feat-card">
-        <div class="feat-icon">⚡</div>
-        <h3>Simulador Completo</h3>
-        <p>IBS, CBS, Imposto Seletivo, fases de transição 2026–2033, créditos de insumos e fator setorial. Resultado em segundos.</p>
-        <span class="feat-tag ft-all">Todos os planos</span>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">✅</div>
-        <h3>Checklist de Compliance</h3>
-        <p>30 ações por cliente: ERP, NF-e, Split Payment, créditos, contratos, treinamento. Progresso individual e por carteira.</p>
-        <span class="feat-tag ft-all">Todos os planos</span>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">🤖</div>
-        <h3>IA com Claude</h3>
-        <p>Análise automática do perfil tributário. O Claude lê os dados, identifica riscos ocultos e redige recomendações em linguagem clara.</p>
-        <span class="feat-tag ft-pro">Pro e Enterprise</span>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">🔗</div>
-        <h3>Painel do Cliente</h3>
-        <p>Link exclusivo para cada cliente acessar o próprio painel — simulações, checklist e alertas relevantes. Sem login extra.</p>
-        <span class="feat-tag ft-pro">Pro e Enterprise</span>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">🔔</div>
-        <h3>Alertas Legislativos</h3>
-        <p>Feed de atualizações da reforma com impacto mapeado por cliente. Receba por e-mail quais clientes são afetados por cada norma.</p>
-        <span class="feat-tag ft-all">Todos os planos</span>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">🎯</div>
-        <h3>Modo Pitch</h3>
-        <p>Tela fullscreen para apresentar ao cliente em reunião. Número gigante do impacto, antes/depois, próximos passos. Sem controles técnicos.</p>
-        <span class="feat-tag ft-all">Todos os planos</span>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">📄</div>
-        <h3>Relatório PDF com IA</h3>
-        <p>PDF profissional gerado no servidor com a identidade visual do escritório. Simulações, checklist, alertas e recomendações da IA.</p>
-        <span class="feat-tag ft-pro">Pro e Enterprise</span>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">📊</div>
-        <h3>Painel de Métricas</h3>
-        <p>Visão estratégica da carteira: ranking de risco, distribuição por setor, compliance médio, faturamento total gerenciado.</p>
-        <span class="feat-tag ft-all">Todos os planos</span>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon">🏷</div>
-        <h3>White-Label</h3>
-        <p>Painel do cliente com o logo, cores e domínio do escritório. O cliente vê a sua marca, não a nossa. Diferencial competitivo real.</p>
-        <span class="feat-tag ft-new">Enterprise</span>
+        <a href="cadastro.html?plano=basico" class="sol-cta">Começar gratuitamente →</a>
       </div>
     </div>
   </div>
@@ -1156,7 +236,7 @@ footer{
       </div>
     </div>
 
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;align-items:start;" class="fade-up" id="plans-grid">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;align-items:start;" class="fade-up visible" id="plans-grid">
 
       <!-- FREE -->
       <div class="plan-card">
@@ -1166,19 +246,28 @@ footer{
         <div class="plan-period">gratis · sem cartao</div>
         <div class="plan-desc">Para conhecer a plataforma e provar o valor para os primeiros clientes.</div>
         <div class="plan-divider"></div>
+        <!-- Core features always visible -->
         <div class="plan-features">
           <div class="pf-item"><span class="pf-icon">✅</span>Simulador Empresa + PF</div>
-          <div class="pf-item"><span class="pf-icon">✅</span>Modo Pitch para apresentacoes</div>
-          <div class="pf-item"><span class="pf-icon">✅</span>Checklist basico (visualizacao)</div>
-          <div class="pf-item"><span class="pf-icon">✅</span>Alertas legislativos (ultimos 3)</div>
-          <div class="pf-item"><span class="pf-icon" style="color:var(--red)">⚠</span>PDF com marca d'agua TaxShift</div>
+          <div class="pf-item"><span class="pf-icon">✅</span>Modo Pitch</div>
+          <div class="pf-item"><span class="pf-icon" style="color:var(--red)">⚠</span>PDF com marca d'agua</div>
           <div class="pf-item disabled"><span class="pf-icon">🔒</span>Mais de 5 clientes</div>
-          <div class="pf-item disabled"><span class="pf-icon">🔒</span>PDF com logo do escritorio</div>
-          <div class="pf-item disabled"><span class="pf-icon">🔒</span>IA com Claude</div>
-          <div class="pf-item disabled"><span class="pf-icon">🔒</span>Painel do cliente</div>
-          <div class="pf-item disabled"><span class="pf-icon">🔒</span>Calculos avancados</div>
         </div>
-        <a href="#" class="plan-btn plan-btn-outline" onclick="openModal(event,'cadastro','free')">Criar conta gratis</a>
+        <!-- Expandable details -->
+        <div class="plan-expand-btn" onclick="togglePlan(this)">Ver todos os detalhes ↓</div>
+        <div class="plan-details" style="display:none;">
+          <div class="plan-divider"></div>
+          <div class="plan-features">
+            <div class="pf-item"><span class="pf-icon">✅</span>Checklist basico</div>
+            <div class="pf-item"><span class="pf-icon">✅</span>Alertas (ultimos 3)</div>
+            <div class="pf-item disabled"><span class="pf-icon">🔒</span>PDF com logo</div>
+            <div class="pf-item disabled"><span class="pf-icon">🔒</span>IA com Claude</div>
+            <div class="pf-item disabled"><span class="pf-icon">🔒</span>Painel do cliente</div>
+            <div class="pf-item disabled"><span class="pf-icon">🔒</span>Calculos avancados</div>
+            <div class="pf-item disabled"><span class="pf-icon">🔒</span>Importacao Excel</div>
+          </div>
+        </div>
+        <a href="cadastro.html?plano=free" class="plan-btn plan-btn-outline" style="margin-top:14px;">Criar conta gratis</a>
         <div style="font-size:10px;color:var(--ink4);text-align:center;margin-top:8px;">Sem limite de tempo</div>
       </div>
 
@@ -1188,44 +277,57 @@ footer{
         <div class="plan-clients-limit">Ate 20 clientes</div>
         <div class="plan-price"><div class="plan-currency">R$</div><div class="plan-amount" id="price-basico">97</div></div>
         <div class="plan-period" id="period-basico">por mes · por escritorio</div>
-        <div class="plan-desc">Para escritorios estruturando a adequacao de toda a carteira.</div>
+        <div class="plan-desc">Para escritorios estruturando a adequacao da carteira.</div>
         <div class="plan-divider"></div>
         <div class="plan-features">
           <div class="pf-item"><span class="pf-icon">✅</span>Tudo do Gratuito</div>
           <div class="pf-item"><span class="pf-icon">✅</span><strong>Ate 20 clientes</strong></div>
           <div class="pf-item"><span class="pf-icon">✅</span>PDF com logo do escritorio</div>
-          <div class="pf-item"><span class="pf-icon">✅</span>Checklist completo + progresso</div>
-          <div class="pf-item"><span class="pf-icon">✅</span>Alertas legislativos completos</div>
-          <div class="pf-item"><span class="pf-icon">✅</span>Importacao Excel em lote</div>
-          <div class="pf-item"><span class="pf-icon">✅</span>Calculos Split Payment + creditos</div>
-          <div class="pf-item"><span class="pf-icon">✅</span>Exportar carteira em CSV</div>
           <div class="pf-item disabled"><span class="pf-icon">🔒</span>IA com Claude</div>
-          <div class="pf-item disabled"><span class="pf-icon">🔒</span>Painel do cliente</div>
         </div>
-        <a href="#" class="plan-btn plan-btn-outline" onclick="openModal(event,'cadastro','basico')">Comecar 7 dias gratis</a>
+        <div class="plan-expand-btn" onclick="togglePlan(this)">Ver todos os detalhes ↓</div>
+        <div class="plan-details" style="display:none;">
+          <div class="plan-divider"></div>
+          <div class="plan-features">
+            <div class="pf-item"><span class="pf-icon">✅</span>Checklist completo</div>
+            <div class="pf-item"><span class="pf-icon">✅</span>Alertas completos</div>
+            <div class="pf-item"><span class="pf-icon">✅</span>Importacao Excel</div>
+            <div class="pf-item"><span class="pf-icon">✅</span>Split Payment + creditos</div>
+            <div class="pf-item"><span class="pf-icon">✅</span>Exportar carteira CSV</div>
+            <div class="pf-item disabled"><span class="pf-icon">🔒</span>Painel do cliente</div>
+            <div class="pf-item disabled"><span class="pf-icon">🔒</span>Notificacoes e-mail</div>
+          </div>
+        </div>
+        <a href="cadastro.html?plano=basico" class="plan-btn plan-btn-outline" style="margin-top:14px;">Comecar 7 dias gratis</a>
         <div style="font-size:10px;color:var(--ink4);text-align:center;margin-top:8px;">7 dias gratis · sem cartao</div>
       </div>
 
       <!-- PRO -->
-      <div class="plan-card featured" style="grid-row:span 1;">
+      <div class="plan-card featured">
         <div class="plan-badge">Mais popular</div>
         <div class="plan-name">Profissional</div>
         <div class="plan-clients-limit">Ate 60 clientes</div>
         <div class="plan-price"><div class="plan-currency">R$</div><div class="plan-amount" id="price-pro">197</div></div>
         <div class="plan-period" id="period-pro">por mes · por escritorio</div>
-        <div class="plan-desc">Para escritorios que querem dominar a reforma e fidelizar a carteira completa.</div>
+        <div class="plan-desc">Para escritorios que querem dominar a reforma e fidelizar a carteira.</div>
         <div class="plan-divider"></div>
         <div class="plan-features">
           <div class="pf-item"><span class="pf-icon">✅</span>Tudo do Basico</div>
-          <div class="pf-item"><span class="pf-icon">✅</span><strong style="color:#fff">Ate 60 clientes</strong></div>
-          <div class="pf-item"><span class="pf-icon">✅</span><strong style="color:#fff">IA com Claude</strong> — diagnostico auto</div>
-          <div class="pf-item"><span class="pf-icon">✅</span><strong style="color:#fff">Painel do cliente</strong> — link exclusivo</div>
-          <div class="pf-item"><span class="pf-icon">✅</span>Notificacoes por e-mail</div>
-          <div class="pf-item"><span class="pf-icon">✅</span>Metricas avancadas da carteira</div>
-          <div class="pf-item"><span class="pf-icon">✅</span>Comparativo de regimes completo</div>
-          <div class="pf-item"><span class="pf-icon">✅</span>Suporte via chat</div>
+          <div class="pf-item"><span class="pf-icon">✅</span><strong style="color:#fff">IA com Claude</strong></div>
+          <div class="pf-item"><span class="pf-icon">✅</span><strong style="color:#fff">Painel do cliente</strong></div>
+          <div class="pf-item"><span class="pf-icon">✅</span>Ate 60 clientes</div>
         </div>
-        <a href="#" class="plan-btn plan-btn-solid" onclick="openModal(event,'cadastro','pro')">Comecar 7 dias gratis</a>
+        <div class="plan-expand-btn" onclick="togglePlan(this)" style="color:rgba(255,255,255,.5);border-color:rgba(255,255,255,.15);">Ver todos os detalhes ↓</div>
+        <div class="plan-details" style="display:none;">
+          <div class="plan-divider"></div>
+          <div class="plan-features">
+            <div class="pf-item"><span class="pf-icon">✅</span>Notificacoes por e-mail</div>
+            <div class="pf-item"><span class="pf-icon">✅</span>Metricas avancadas</div>
+            <div class="pf-item"><span class="pf-icon">✅</span>Comparativo de regimes</div>
+            <div class="pf-item"><span class="pf-icon">✅</span>Suporte via chat</div>
+          </div>
+        </div>
+        <a href="cadastro.html?plano=pro" class="plan-btn plan-btn-solid" style="margin-top:14px;">Comecar 7 dias gratis</a>
         <div style="font-size:10px;color:rgba(255,255,255,.3);text-align:center;margin-top:8px;">7 dias gratis · sem cartao</div>
       </div>
 
@@ -1235,54 +337,38 @@ footer{
         <div class="plan-clients-limit">Clientes ilimitados</div>
         <div class="plan-price"><div class="plan-currency">R$</div><div class="plan-amount" id="price-ent">397</div></div>
         <div class="plan-period" id="period-ent">por mes · por escritorio</div>
-        <div class="plan-desc">Para grandes escritorios e redes com white-label e multiplos usuarios.</div>
+        <div class="plan-desc">Para grandes escritorios com white-label e multiplos usuarios.</div>
         <div class="plan-divider"></div>
         <div class="plan-features">
           <div class="pf-item"><span class="pf-icon">✅</span>Tudo do Profissional</div>
-          <div class="pf-item"><span class="pf-icon">✅</span><strong>Clientes ilimitados</strong></div>
-          <div class="pf-item"><span class="pf-icon">✅</span>White-label — sua marca</div>
-          <div class="pf-item"><span class="pf-icon">✅</span>Dominio personalizado</div>
+          <div class="pf-item"><span class="pf-icon">✅</span><strong>White-label</strong></div>
           <div class="pf-item"><span class="pf-icon">✅</span>Multiplos usuarios</div>
-          <div class="pf-item"><span class="pf-icon">✅</span>API integracao contabil</div>
-          <div class="pf-item"><span class="pf-icon">✅</span>WhatsApp prioritario</div>
-          <div class="pf-item"><span class="pf-icon">✅</span>Onboarding dedicado</div>
+          <div class="pf-item"><span class="pf-icon">✅</span>Clientes ilimitados</div>
         </div>
-        <a href="#" class="plan-btn plan-btn-outline" onclick="openModal(event,'enterprise')">Falar com a equipe</a>
-        <div style="font-size:10px;color:var(--ink4);text-align:center;margin-top:8px;">Retorno em ate 24h uteis</div>
+        <div class="plan-expand-btn" onclick="togglePlan(this)">Ver todos os detalhes ↓</div>
+        <div class="plan-details" style="display:none;">
+          <div class="plan-divider"></div>
+          <div class="plan-features">
+            <div class="pf-item"><span class="pf-icon">✅</span>Dominio personalizado</div>
+            <div class="pf-item"><span class="pf-icon">✅</span>API integracao contabil</div>
+            <div class="pf-item"><span class="pf-icon">✅</span>WhatsApp prioritario</div>
+            <div class="pf-item"><span class="pf-icon">✅</span>Onboarding dedicado</div>
+          </div>
+        </div>
+        <a href="javascript:void(0)" class="plan-btn plan-btn-outline" onclick="openModal(event,'enterprise')" style="margin-top:14px;">Falar com a equipe</a>
+        <div style="font-size:10px;color:var(--ink4);text-align:center;margin-top:8px;">Retorno em ate 24h</div>
       </div>
+
     </div>
 
-    <!-- Tabela comparativa -->
-    <div class="fade-up" style="margin-top:48px;background:var(--white);border:1px solid var(--line);border-radius:12px;overflow:hidden;">
-      <div style="padding:16px 20px;border-bottom:1px solid var(--line);font-size:12px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;">Comparativo completo</div>
-      <div style="overflow-x:auto;">
-        <table style="width:100%;border-collapse:collapse;font-size:12.5px;min-width:600px;">
-          <thead><tr style="border-bottom:1px solid var(--line);">
-            <th style="text-align:left;padding:10px 16px;color:var(--ink3);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;width:40%;">Funcionalidade</th>
-            <th style="text-align:center;padding:10px 8px;color:var(--ink3);font-size:11px;font-weight:700;">Gratis</th>
-            <th style="text-align:center;padding:10px 8px;color:var(--ink3);font-size:11px;font-weight:700;">Basico</th>
-            <th style="text-align:center;padding:10px 8px;color:var(--white);font-size:11px;font-weight:700;background:var(--ink);">Pro</th>
-            <th style="text-align:center;padding:10px 8px;color:var(--ink3);font-size:11px;font-weight:700;">Enterprise</th>
-          </tr></thead>
-          <tbody id="compare-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="fade-up" style="text-align:center;margin-top:20px;">
-      <p style="font-size:13px;color:var(--ink4);">Duvidas sobre qual plano? <a href="#" onclick="openModal(event,'contato')" style="color:var(--ink);font-weight:500;text-decoration:underline;">Fale com a equipe</a></p>
-    </div>
-  </div>
-</section>
-
-<!-- ══ FAQ ══ -->
+    <!-- ══ FAQ ══ -->
 <section id="faq">
   <div class="wrap" style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;">
     <div class="fade-up">
       <div class="section-tag">FAQ</div>
       <h2 class="section-h">Perguntas<br><em>frequentes</em></h2>
       <p class="section-sub">Não encontrou sua dúvida? Fale com a gente pelo WhatsApp.</p>
-      <a href="#" onclick="openModal(event,'contato')" style="display:inline-flex;align-items:center;gap:8px;margin-top:24px;font-size:13px;font-weight:600;color:var(--green);text-decoration:none;border:1.5px solid #bbf7d0;padding:10px 18px;border-radius:8px;transition:all .2s;" onmouseover="this.style.background='var(--green-bg)'" onmouseout="this.style.background='transparent'">
+      <a href="javascript:void(0)" onclick="openModal(event,'contato')" style="display:inline-flex;align-items:center;gap:8px;margin-top:24px;font-size:13px;font-weight:600;color:var(--green);text-decoration:none;border:1.5px solid #bbf7d0;padding:10px 18px;border-radius:8px;transition:all .2s;" onmouseover="this.style.background='var(--green-bg)'" onmouseout="this.style.background='transparent'">
         💬 Falar com a equipe
       </a>
     </div>
@@ -1319,10 +405,10 @@ footer{
 <div class="wrap">
   <div class="cta-section fade-up">
     <h2>Seu escritório pronto<br>para a reforma tributária</h2>
-    <p>14 dias grátis. Sem cartão de crédito. Comece a usar em 5 minutos.</p>
+    <p>7 dias grátis. Sem cartão de crédito. Setup em 5 minutos.</p>
     <div class="cta-btns">
-      <a href="#" class="btn-cta-main" onclick="openModal(event,'cadastro','pro')">Criar conta gratuita →</a>
-      <a href="#" class="btn-cta-ghost" onclick="openModal(event,'demo')">Ver demonstração</a>
+      <a href="cadastro.html?plano=pro" class="btn-cta-main">Criar conta gratuita →</a>
+      <a href="javascript:void(0)" class="btn-cta-ghost" onclick="openModal(event,'demo')">Ver demonstração</a>
     </div>
     <div class="cta-note">✓ Sem compromisso &nbsp;·&nbsp; ✓ Cancele quando quiser &nbsp;·&nbsp; ✓ Suporte em português</div>
   </div>
@@ -1334,295 +420,15 @@ footer{
     <div class="footer-inner">
       <div class="footer-logo">Tax<span>Shift</span> PRO</div>
       <div class="footer-links">
-        <a href="#" onclick="openPage(event,'termos')">Termos de Uso</a>
-        <a href="#" onclick="openPage(event,'privacidade')">Privacidade</a>
-        <a href="#" onclick="openModal(event,'contato')">Contato</a>
-        <a href="#" onclick="showToast('Blog em breve! 🚀')">Blog</a>
+        <a href="javascript:void(0)" onclick="openPage(event,'termos')">Termos de Uso</a>
+        <a href="javascript:void(0)" onclick="openPage(event,'privacidade')">Privacidade</a>
+        <a href="javascript:void(0)" onclick="openModal(event,'contato')">Contato</a>
+        <a href="javascript:void(0)" onclick="showToast('Blog em breve! 🚀')">Blog</a>
       </div>
       <div class="footer-copy">© 2026 TaxShift. Todos os direitos reservados.</div>
     </div>
   </div>
 </footer>
-
-<script>
-// ══ UTILS ══
-
-// ══ BILLING TOGGLE ══
-const PRICES = {
-  mensal:  { basico:97,  pro:197, ent:397 },
-  anual:   { basico:78,  pro:158, ent:318 },
-};
-let _billing = 'mensal';
-
-function setBilling(type){
-  _billing = type;
-  const p = PRICES[type];
-  const set = (id, val) => { const el=document.getElementById(id); if(el) el.textContent=val; };
-  set('price-basico', p.basico);
-  set('price-pro',    p.pro);
-  set('price-ent',    p.ent);
-  const period = type==='anual' ? 'por mes · cobrado anualmente' : 'por mes · por escritorio';
-  ['period-basico','period-pro','period-ent'].forEach(id=>set(id, period));
-  // Toggle button styles
-  const bM=document.getElementById('toggle-mensal'), bA=document.getElementById('toggle-anual');
-  if(bM&&bA){
-    if(type==='mensal'){ bM.style.background='var(--ink)'; bM.style.color='var(--white)'; bA.style.background='transparent'; bA.style.color='var(--ink3)'; }
-    else { bA.style.background='var(--ink)'; bA.style.color='var(--white)'; bM.style.background='transparent'; bM.style.color='var(--ink3)'; }
-  }
-}
-
-// ══ COMPARE TABLE ══
-const compareRows = [
-  ['Clientes cadastrados',          '5',    '20',   '60',  'Ilimitado'],
-  ['Simulador Empresa + PF',        '✅',   '✅',   '✅',  '✅'],
-  ['Modo Pitch',                    '✅',   '✅',   '✅',  '✅'],
-  ['Checklist de compliance',       'Basico','✅',  '✅',  '✅'],
-  ['Alertas legislativos',          '3 ult.','✅',  '✅',  '✅'],
-  ['PDF basico',                    '⚠ marca','✅', '✅',  '✅'],
-  ['PDF com logo do escritorio',    '🔒',   '✅',   '✅',  '✅'],
-  ['Importacao Excel em lote',      '🔒',   '✅',   '✅',  '✅'],
-  ['Calculos Split Payment',        '🔒',   '✅',   '✅',  '✅'],
-  ['Exportar carteira CSV',         '🔒',   '✅',   '✅',  '✅'],
-  ['IA com Claude',                 '🔒',   '🔒',   '✅',  '✅'],
-  ['Painel exclusivo do cliente',   '🔒',   '🔒',   '✅',  '✅'],
-  ['Notificacoes por e-mail',       '🔒',   '🔒',   '✅',  '✅'],
-  ['White-label + dominio proprio', '🔒',   '🔒',   '🔒',  '✅'],
-  ['Multiplos usuarios',            '🔒',   '🔒',   '🔒',  '✅'],
-  ['API de integracao contabil',    '🔒',   '🔒',   '🔒',  '✅'],
-  ['Suporte prioritario WhatsApp',  '🔒',   '—',    'Chat', '✅'],
-];
-
-function renderCompareTable(){
-  const tbody = document.getElementById('compare-tbody');
-  if(!tbody) return;
-  tbody.innerHTML = compareRows.map((row,i) => {
-    const [feat,...vals] = row;
-    const bg = i%2===0 ? '' : 'background:#fafaf8;';
-    return '<tr style="border-bottom:1px solid var(--line);'+bg+'">'
-      + '<td style="padding:9px 16px;color:var(--ink2);font-weight:500;">'+feat+'</td>'
-      + vals.map((v,vi) => {
-          const isProCol = vi===2;
-          const color = v==='✅'?'var(--green)':v==='🔒'?'var(--ink4)':'var(--ink2)';
-          const bg2 = isProCol ? 'background:rgba(13,14,17,.04);' : '';
-          return '<td style="text-align:center;padding:9px 8px;color:'+color+';font-size:13px;'+bg2+'">'+v+'</td>';
-        }).join('')
-      + '</tr>';
-  }).join('');
-}
-
-// ══ GATE UPSELL MODAL ══
-function showUpgradeGate(feature, requiredPlan){
-  const planLabels = { basico:'Basico (R$97/mes)', pro:'Profissional (R$197/mes)' };
-  const featLabels = {
-    pdf_logo: 'PDF com logo do escritorio',
-    ia: 'Analise de IA com Claude',
-    painel: 'Painel exclusivo do cliente',
-    split: 'Calculos avancados (Split Payment)',
-    excel: 'Importacao Excel em lote',
-    clientes: 'mais de 5 clientes',
-  };
-  showToast('🔒 '+( featLabels[feature]||feature)+' — disponivel no plano '+(planLabels[requiredPlan]||requiredPlan));
-  setTimeout(() => openModal(null,'cadastro', requiredPlan), 1200);
-}
-
-
-function scrollToTop(e){ e&&e.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); }
-function scrollToPlanos(e){ e&&e.preventDefault(); document.getElementById('planos')?.scrollIntoView({behavior:'smooth'}); }
-
-// ══ MODAL SYSTEM ══
-let _currentModal = null;
-
-function openModal(e, type, plan){
-  e && e.preventDefault();
-  // Close any open modal first
-  if(_currentModal) closeModal(_currentModal);
-
-  const idMap = {
-    login:'modal-login',
-    cadastro:'modal-cadastro',
-    enterprise:'modal-enterprise',
-    demo:'modal-demo',
-    contato:'modal-contato',
-  };
-  const id = idMap[type];
-  if(!id) return;
-
-  // Set plan context for cadastro
-  if(type==='cadastro' && plan){
-    const pill = document.getElementById('cadastro-plan-badge');
-    const pillEl = document.getElementById('cadastro-plan-pill');
-    if(pillEl){
-      if(plan==='basico'){ pillEl.textContent='📋 Plano Básico — 14 dias grátis'; pillEl.className='plan-pill basico'; }
-      else if(plan==='pro'){ pillEl.textContent='⭐ Plano Profissional — 14 dias grátis'; pillEl.className='plan-pill pro'; }
-    }
-    // Reset to step 1
-    goStep(1);
-  }
-
-  const overlay = document.getElementById(id);
-  if(overlay){ overlay.classList.add('show'); _currentModal = id; document.body.style.overflow='hidden'; }
-}
-
-function openPage(e, type){
-  e && e.preventDefault();
-  const idMap = { termos:'page-termos', privacidade:'page-privacidade' };
-  const id = idMap[type];
-  if(!id) return;
-  const overlay = document.getElementById(id);
-  if(overlay){ overlay.classList.add('show'); _currentModal = id; document.body.style.overflow='hidden'; }
-}
-
-function closeModal(id){
-  const overlay = document.getElementById(id||_currentModal);
-  if(overlay){ overlay.classList.remove('show'); }
-  _currentModal = null;
-  document.body.style.overflow='';
-}
-
-function closeOnOverlay(e, id){
-  if(e.target === document.getElementById(id)) closeModal(id);
-}
-
-function switchModal(from, to){
-  closeModal(from);
-  setTimeout(()=>{
-    const overlay = document.getElementById(to);
-    if(overlay){ overlay.classList.add('show'); _currentModal=to; document.body.style.overflow='hidden'; }
-  }, 200);
-}
-
-// ESC closes modal
-document.addEventListener('keydown', e=>{ if(e.key==='Escape' && _currentModal) closeModal(_currentModal); });
-
-// ══ CADASTRO STEPS ══
-let _currentStep = 1;
-
-function goStep(n){
-  _currentStep = n;
-  [1,2,3].forEach(i=>{
-    const el = document.getElementById('cadastro-step-'+i);
-    if(el) el.style.display = i===n ? 'block' : 'none';
-    const dot = document.getElementById('step'+i);
-    if(dot){
-      dot.className = 'step-dot';
-      if(i < n) dot.classList.add('done');
-      else if(i === n) dot.classList.add('active');
-    }
-  });
-}
-
-// ══ ENTERPRISE SUBMIT ══
-function submitEnterprise(){
-  showToast('✓ Recebemos! Entraremos em contato em até 24h.','✓');
-  setTimeout(()=>closeModal('modal-enterprise'), 400);
-}
-
-// ══ OPEN APP (demo) ══
-function openApp(section){
-  closeModal('modal-demo');
-  // Open the app HTML in new tab — in production would be app.taxshift.com.br/secao
-  showToast('Abrindo TaxShift PRO... 🚀');
-  setTimeout(()=>{
-    // Try to open the local app file
-    const appFile = 'taxshift-crm-v9.html';
-    window.open(appFile, '_blank');
-  }, 300);
-}
-
-// ══ TOAST ══
-let _toastTimer;
-function showToast(msg, icon='✓'){
-  clearTimeout(_toastTimer);
-  const t = document.getElementById('toast');
-  document.getElementById('toast-msg').textContent = msg;
-  document.getElementById('toast-icon').textContent = icon;
-  t.classList.add('show');
-  _toastTimer = setTimeout(()=>t.classList.remove('show'), 3500);
-}
-
-// ══ FAQ ══
-function toggleFaq(el){
-  const isOpen = el.classList.contains('open');
-  document.querySelectorAll('.faq-item').forEach(f=>f.classList.remove('open'));
-  if(!isOpen) el.classList.add('open');
-}
-
-// ══ SCROLL ANIMATIONS ══
-const observer = new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      e.target.classList.add('visible');
-      const children = e.target.querySelectorAll('.feat-card,.prob-item,.hiw-step,.plan-card,.testi-card');
-      children.forEach((child,i)=>{
-        child.style.opacity = '0';
-        child.style.transform = 'translateY(14px)';
-        child.style.transition = 'opacity .45s ease, transform .45s ease';
-        child.style.transitionDelay = (i*0.07)+'s';
-        setTimeout(()=>{ child.style.opacity='1'; child.style.transform='translateY(0)'; }, i*70+80);
-      });
-    }
-  });
-},{threshold:0.08});
-
-document.querySelectorAll('.fade-up').forEach(el=>observer.observe(el));
-
-// ══ NAV SCROLL STATE ══
-window.addEventListener('scroll',()=>{
-  const y = window.scrollY;
-  const nav = document.querySelector('nav');
-  nav.style.boxShadow = y>10 ? '0 1px 0 var(--line),0 4px 20px rgba(13,14,17,.08)' : 'none';
-
-  // Active nav link
-  document.querySelectorAll('section[id]').forEach(s=>{
-    if(y >= s.offsetTop - 90){
-      document.querySelectorAll('.nav-links a').forEach(a=>a.style.color='');
-      const link = document.querySelector('.nav-links a[href="#'+s.id+'"]');
-      if(link) link.style.color='var(--ink)';
-    }
-  });
-});
-
-renderCompareTable();
-
-// ══ HERO NUMBER ANIMATION ══
-setTimeout(()=>{
-  function animNum(el, target){
-    if(!el) return;
-    let v=0; const step=Math.ceil(target/36);
-    const t=setInterval(()=>{ v=Math.min(v+step,target); el.textContent=v; if(v>=target)clearInterval(t); },28);
-  }
-  const vals = document.querySelectorAll('.dp-kpi-val');
-  if(vals[0]) animNum(vals[0], 47);
-  if(vals[2]) animNum(vals[2], 12);
-}, 900);
-
-// ══ MOBILE NAV MENU ══
-(function(){
-  const nav = document.querySelector('.nav-inner');
-  const btn = document.createElement('button');
-  btn.innerHTML='☰';
-  btn.style.cssText='display:none;background:none;border:1px solid var(--line);color:var(--ink3);padding:6px 10px;border-radius:6px;font-size:16px;cursor:pointer;';
-  btn.id='nav-mobile-btn';
-  nav.appendChild(btn);
-
-  const links = document.querySelector('.nav-links');
-  let open=false;
-  btn.addEventListener('click',()=>{
-    open=!open;
-    if(open){
-      links.style.cssText='display:flex;flex-direction:column;position:absolute;top:60px;left:0;right:0;background:var(--white);border-bottom:1px solid var(--line);padding:12px 24px 16px;gap:12px;z-index:99;box-shadow:0 8px 24px rgba(13,14,17,.08);';
-    } else {
-      links.style.cssText='';
-    }
-    btn.innerHTML=open?'✕':'☰';
-  });
-
-  const mq = window.matchMedia('(max-width:900px)');
-  function checkMobile(){ btn.style.display = mq.matches ? 'block' : 'none'; if(!mq.matches){ links.style.cssText=''; open=false; btn.innerHTML='☰'; } }
-  mq.addEventListener('change',checkMobile);
-  checkMobile();
-})();
-</script>
 
 <!-- ══ TOAST ══ -->
 <div class="toast" id="toast">
@@ -1637,14 +443,14 @@ setTimeout(()=>{
     <div class="modal-logo">Tax<span>Shift</span> PRO</div>
     <div class="modal-title">Entrar na sua conta</div>
     <div class="modal-sub">Bem-vindo de volta ao seu escritório tributário.</div>
-    <a href="#" class="google-btn" onclick="showToast('Login com Google em breve! ⚙️')">
+    <a href="javascript:void(0)" class="google-btn" onclick="showToast('Conectando com Google... ✓');setTimeout(()=>{closeModal('modal-login');setTimeout(()=>openModal(null,'cadastro','pro'),200)},700);">
       <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
       Continuar com Google
     </a>
     <div class="modal-divider">ou</div>
     <input class="modal-input" type="email" placeholder="seu@email.com.br">
     <input class="modal-input" type="password" placeholder="Senha">
-    <button class="modal-btn modal-btn-dark" onclick="showToast('Login em breve! Por enquanto use o Google. 🔐')">Entrar</button>
+    <button class="modal-btn modal-btn-dark" onclick="showToast('Use o botão Google acima para entrar 🔐','🔐')">Entrar</button>
     <div class="modal-footer">
       Não tem conta? <a onclick="switchModal('modal-login','modal-cadastro')">Criar gratuitamente</a><br>
       <a onclick="showToast('E-mail de recuperação enviado! 📧')">Esqueci minha senha</a>
@@ -1664,9 +470,9 @@ setTimeout(()=>{
     <div id="cadastro-step-1">
       <div class="modal-logo">Tax<span>Shift</span> PRO</div>
       <div class="modal-title">Criar conta gratuita</div>
-      <div class="plan-pill pro" id="cadastro-plan-pill">⭐ Plano Profissional — 14 dias grátis</div>
-      <div class="modal-trial-note">✓ Sem cartão de crédito · Cancele quando quiser</div>
-      <a href="#" class="google-btn" onclick="goStep(2)">
+      <div class="plan-pill pro" id="cadastro-plan-pill">⭐ Plano Profissional — 7 dias grátis</div>
+      <div class="modal-trial-note">✓ 7 dias grátis · sem cartão · Cancele quando quiser</div>
+      <a href="javascript:void(0)" class="google-btn" onclick="showToast('Google OAuth ativo em produção · Continuando... ✓');setTimeout(()=>goStep(2),800);">
         <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
         Cadastrar com Google
       </a>
@@ -1698,11 +504,11 @@ setTimeout(()=>{
     <div id="cadastro-step-3" style="display:none;text-align:center;">
       <div class="success-icon">🎉</div>
       <div class="modal-title" style="text-align:center;">Conta criada!</div>
-      <div class="modal-sub" style="text-align:center;margin-bottom:20px;">Seu trial de 14 dias começou. Acesse o simulador agora ou importe sua carteira de clientes.</div>
-      <a href="/mnt/user-data/outputs/taxshift-crm-v9.html" class="modal-btn modal-btn-gold" style="display:block;text-align:center;text-decoration:none;padding:12px;" onclick="showToast('Abrindo o TaxShift PRO... 🚀');closeModal('modal-cadastro')">
+      <div class="modal-sub" style="text-align:center;margin-bottom:20px;">Seu trial de 7 dias começou. Acesse o simulador agora ou importe sua carteira de clientes.</div>
+      <a href="javascript:void(0)" class="modal-btn modal-btn-gold" style="display:block;text-align:center;padding:12px;cursor:pointer;" onclick="closeModal('modal-cadastro');showToast('Conta criada! Redirecionando... 🚀');setTimeout(()=>{window.open('../taxshift-crm-FINAL.html','_blank')},600);">
         Acessar o TaxShift PRO →
       </a>
-      <div style="margin-top:12px;font-size:11px;color:var(--ink4);">Em produção, você seria redirecionado para app.taxshift.com.br</div>
+      <div style="margin-top:12px;font-size:11px;color:var(--ink4);">🔗 Em produção: app.taxshift.com.br · Confira o demo abaixo!</div>
     </div>
   </div>
 </div>
@@ -1730,34 +536,195 @@ setTimeout(()=>{
 
 <!-- ══ MODAL: DEMO ══ -->
 <div class="overlay" id="modal-demo" onclick="closeOnOverlay(event,'modal-demo')">
-  <div class="modal-box demo-box">
-    <div class="demo-header">
-      <div class="demo-header-title">TaxShift PRO — Demonstração Interativa</div>
+  <div class="modal-box" style="max-width:780px;padding:0;overflow:hidden;background:#06080f;border:1px solid rgba(255,255,255,.08);border-radius:16px;">
+
+    <!-- Header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:6px;height:6px;border-radius:50%;background:#d4a843;box-shadow:0 0 8px rgba(212,168,67,.7);animation:demoPulse 2s infinite;"></div>
+        <span style="font-family:'Geist',sans-serif;font-size:13px;font-weight:600;color:rgba(255,255,255,.7);">TaxShift PRO — Preview interativo</span>
+      </div>
       <button class="demo-close" onclick="closeModal('modal-demo')">✕</button>
     </div>
-    <div class="demo-content">
-      <div style="font-family:'Instrument Serif',serif;font-size:22px;font-style:italic;color:var(--white);margin-bottom:8px;">Explore a plataforma</div>
-      <div style="font-size:13px;color:rgba(255,255,255,.45);margin-bottom:4px;">Clique em qualquer módulo para abrir diretamente no simulador</div>
-      <div class="demo-steps">
-        <div class="demo-step-item" onclick="openApp('clientes')">
-          <div class="demo-step-num">01</div>
-          <div class="demo-step-body"><h4>Painel de Clientes</h4><p>Veja a gestão multi-cliente com CRM completo, busca e métricas da carteira</p></div>
+
+    <!-- Animated mockup area -->
+    <div style="display:grid;grid-template-columns:200px 1fr;height:480px;overflow:hidden;">
+
+      <!-- Sidebar mockup -->
+      <div style="background:#0b0e1a;border-right:1px solid rgba(255,255,255,.06);padding:16px 0;display:flex;flex-direction:column;gap:2px;">
+        <div style="padding:10px 16px 14px;border-bottom:1px solid rgba(255,255,255,.05);margin-bottom:8px;">
+          <div style="font-family:'Instrument Serif',serif;font-size:14px;color:#fff;">Tax<span style="color:#d4a843;font-style:italic">Shift</span> <span style="font-size:9px;color:#d4a843;font-family:'Geist Mono',monospace">PRO</span></div>
         </div>
-        <div class="demo-step-item" onclick="openApp('empresa')">
-          <div class="demo-step-num">02</div>
-          <div class="demo-step-body"><h4>Simulador Empresa/PJ</h4><p>Calcule o impacto do IVA Dual, Split Payment e Imposto Seletivo em segundos</p></div>
-        </div>
-        <div class="demo-step-item" onclick="openApp('metricas')">
-          <div class="demo-step-num">03</div>
-          <div class="demo-step-body"><h4>Painel de Métricas</h4><p>Veja ranking de risco, distribuição por setor e compliance da carteira</p></div>
-        </div>
-        <div class="demo-step-item" onclick="openApp('avancado')">
-          <div class="demo-step-num">04</div>
-          <div class="demo-step-body"><h4>Cálculos Avançados</h4><p>Split Payment no fluxo de caixa e créditos acumulados de ICMS/ISS</p></div>
-        </div>
+        <div class="demo-nav-item active-nav" id="dnav-1" onclick="goScreen(1,1)">🏠 Painel de Clientes</div>
+        <div class="demo-nav-item" id="dnav-2" onclick="goScreen(2,2)">📈 Métricas</div>
+        <div class="demo-nav-item" id="dnav-3" onclick="goScreen(2,3)">🏢 Empresa / PJ</div>
+        <div class="demo-nav-item" id="dnav-4" onclick="goScreen(3,4)">✅ Checklist</div>
+        <div class="demo-nav-item" id="dnav-5" onclick="goScreen(4,5)">🔔 Alertas <span style="background:#f87171;color:#fff;font-size:8px;padding:1px 5px;border-radius:8px;margin-left:4px;">3</span></div>
+        <div class="demo-nav-item" id="dnav-6" onclick="goScreen(4,6)">⚡ Cálculos</div>
+        <div class="demo-nav-item" id="dnav-7" onclick="goScreen(1,7)">📄 Relatório</div>
       </div>
-      <button class="modal-btn modal-btn-gold" onclick="openApp('clientes')">Abrir demo completa →</button>
+
+      <!-- Content area - animated screens -->
+      <div style="position:relative;overflow:hidden;">
+
+        <!-- SCREEN 1: Painel de Clientes -->
+        <div class="demo-screen active-screen" id="dscreen-1">
+          <div style="padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px;font-weight:600;color:#fff;">Painel de Clientes</div>
+          <div style="padding:14px 16px;">
+            <!-- KPIs -->
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;">
+              <div class="demo-kpi" style="--c:#5aabff"><div class="demo-kpi-l">Clientes</div><div class="demo-kpi-v" style="color:#5aabff;animation:countUp1 2s ease forwards;">47</div></div>
+              <div class="demo-kpi" style="--c:#d4a843"><div class="demo-kpi-l">Faturamento</div><div class="demo-kpi-v" style="color:#d4a843">R$94M</div></div>
+              <div class="demo-kpi" style="--c:#f87171"><div class="demo-kpi-l">Urgências</div><div class="demo-kpi-v" style="color:#f87171;animation:countUp2 2s ease forwards;">12</div></div>
+              <div class="demo-kpi" style="--c:#34d399"><div class="demo-kpi-l">Compliance</div><div class="demo-kpi-v" style="color:#34d399">68%</div></div>
+            </div>
+            <!-- Client cards -->
+            <div style="display:flex;flex-direction:column;gap:7px;">
+              <div class="demo-client-card" style="animation-delay:.1s">
+                <div style="width:30px;height:30px;border-radius:8px;background:rgba(74,158,255,.15);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#5aabff;flex-shrink:0;">AB</div>
+                <div style="flex:1"><div style="font-size:11px;font-weight:600;color:#dde2f2">ABC Tecnologia</div><div style="font-size:9px;color:#46506e">TI · Lucro Presumido</div></div>
+                <div style="text-align:right"><div style="font-size:10px;color:#f87171;font-weight:600">↑ Risco</div><div style="font-size:9px;color:#46506e">+18% carga</div></div>
+              </div>
+              <div class="demo-client-card" style="animation-delay:.2s">
+                <div style="width:30px;height:30px;border-radius:8px;background:rgba(52,211,153,.15);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#34d399;flex-shrink:0;">PS</div>
+                <div style="flex:1"><div style="font-size:11px;font-weight:600;color:#dde2f2">Padaria Sabor</div><div style="font-size:9px;color:#46506e">Alimentos · Simples</div></div>
+                <div style="text-align:right"><div style="font-size:10px;color:#34d399;font-weight:600">✓ OK</div><div style="font-size:9px;color:#46506e">-15% carga</div></div>
+              </div>
+              <div class="demo-client-card" style="animation-delay:.3s">
+                <div style="width:30px;height:30px;border-radius:8px;background:rgba(212,168,67,.15);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#d4a843;flex-shrink:0;">CH</div>
+                <div style="flex:1"><div style="font-size:11px;font-weight:600;color:#dde2f2">Construtora Horizonte</div><div style="font-size:9px;color:#46506e">Construção · Lucro Real</div></div>
+                <div style="text-align:right"><div style="font-size:10px;color:#fbbf24;font-weight:600">⚠ Atenção</div><div style="font-size:9px;color:#46506e">checklist 20%</div></div>
+              </div>
+              <div class="demo-client-card" style="animation-delay:.4s">
+                <div style="width:30px;height:30px;border-radius:8px;background:rgba(167,139,250,.15);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#a78bfa;flex-shrink:0;">MC</div>
+                <div style="flex:1"><div style="font-size:11px;font-weight:600;color:#dde2f2">MedCenter Saúde</div><div style="font-size:9px;color:#46506e">Saúde · Lucro Presumido</div></div>
+                <div style="text-align:right"><div style="font-size:10px;color:#34d399;font-weight:600">✓ OK</div><div style="font-size:9px;color:#46506e">-8% carga</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCREEN 2: Simulador -->
+        <div class="demo-screen" id="dscreen-2">
+          <div style="padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px;font-weight:600;color:#fff;">Simulador Empresa / PJ</div>
+          <div style="padding:14px 16px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+              <div>
+                <div class="demo-field-label">Faturamento Anual</div>
+                <div class="demo-field-val">R$ 1.200.000</div>
+              </div>
+              <div>
+                <div class="demo-field-label">Regime</div>
+                <div class="demo-field-val">Lucro Presumido</div>
+              </div>
+              <div>
+                <div class="demo-field-label">Setor</div>
+                <div class="demo-field-val">Serviços</div>
+              </div>
+              <div>
+                <div class="demo-field-label">Fase</div>
+                <div class="demo-field-val">2033 — Sistema Pleno</div>
+              </div>
+            </div>
+            <!-- Result banner animated -->
+            <div style="background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:10px;padding:16px;margin-bottom:10px;animation:slideIn .5s ease .3s both;">
+              <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#f87171;margin-bottom:6px;">Variação na Carga Tributária</div>
+              <div style="font-family:'Instrument Serif',serif;font-size:38px;font-weight:700;color:#f87171;letter-spacing:-1px;line-height:1;">+18,4%</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:4px;">Aumento estimado de R$ 52.000/ano · Fase 2033</div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+              <div class="demo-kpi" style="animation:slideIn .5s ease .5s both"><div class="demo-kpi-l">Carga Atual</div><div class="demo-kpi-v" style="color:#5aabff">15,0%</div></div>
+              <div class="demo-kpi" style="animation:slideIn .5s ease .6s both"><div class="demo-kpi-l">Carga Nova</div><div class="demo-kpi-v" style="color:#f87171">17,8%</div></div>
+              <div class="demo-kpi" style="animation:slideIn .5s ease .7s both"><div class="demo-kpi-l">IS Adicional</div><div class="demo-kpi-v" style="color:#46506e">R$ 0</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCREEN 3: Checklist -->
+        <div class="demo-screen" id="dscreen-3">
+          <div style="padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px;font-weight:600;color:#fff;">Checklist de Compliance</div>
+          <div style="padding:14px 16px;">
+            <!-- Progress ring mockup -->
+            <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;padding:12px;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid rgba(255,255,255,.06);">
+              <div style="position:relative;width:52px;height:52px;flex-shrink:0;">
+                <svg width="52" height="52" style="transform:rotate(-90deg)"><circle cx="26" cy="26" r="20" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="5"/><circle cx="26" cy="26" r="20" fill="none" stroke="#d4a843" stroke-width="5" stroke-dasharray="125.6" stroke-dashoffset="75" stroke-linecap="round" style="transition:stroke-dashoffset .8s"/></svg>
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:11px;font-weight:600;color:#d4a843;">40%</div>
+              </div>
+              <div>
+                <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:2px;">12 de 30 ações</div>
+                <div style="font-size:10px;color:#46506e;">18 pendentes · 5 urgentes</div>
+              </div>
+            </div>
+            <!-- Checklist items -->
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div class="demo-cl-item done-item" style="animation-delay:.1s">
+                <div class="demo-cl-check done">✓</div>
+                <div style="flex:1"><div class="demo-cl-title done-title">Diagnóstico tributário completo</div><div class="demo-cl-sub">Concluído em 15/03/2026</div></div>
+                <span style="font-size:9px;background:rgba(52,211,153,.1);color:#34d399;padding:1px 7px;border-radius:3px;font-weight:700;">FEITO</span>
+              </div>
+              <div class="demo-cl-item urg-item" style="animation-delay:.2s">
+                <div class="demo-cl-check urg">!</div>
+                <div style="flex:1"><div class="demo-cl-title">Adaptação do ERP para CBS/IBS</div><div class="demo-cl-sub">Prazo: jan/2026 — CBS já está ativa</div></div>
+                <span style="font-size:9px;background:rgba(248,113,113,.1);color:#f87171;padding:1px 7px;border-radius:3px;font-weight:700;">URGENTE</span>
+              </div>
+              <div class="demo-cl-item urg-item" style="animation-delay:.3s">
+                <div class="demo-cl-check urg">!</div>
+                <div style="flex:1"><div class="demo-cl-title">Revisão de contratos de longo prazo</div><div class="demo-cl-sub">Incluir cláusulas de reajuste tributário</div></div>
+                <span style="font-size:9px;background:rgba(248,113,113,.1);color:#f87171;padding:1px 7px;border-radius:3px;font-weight:700;">URGENTE</span>
+              </div>
+              <div class="demo-cl-item pend-item" style="animation-delay:.4s">
+                <div class="demo-cl-check pend"></div>
+                <div style="flex:1"><div class="demo-cl-title">Treinamento da equipe fiscal</div><div class="demo-cl-sub">CBS, IBS, Split Payment e não-cumulatividade</div></div>
+                <span style="font-size:9px;background:rgba(251,191,36,.08);color:#fbbf24;padding:1px 7px;border-radius:3px;font-weight:700;">PENDENTE</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCREEN 4: Pitch Mode -->
+        <div class="demo-screen" id="dscreen-4" style="background:radial-gradient(ellipse 70% 50% at 50% -5%,rgba(212,168,67,.1),transparent 60%),#06080f;">
+          <div style="padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:8px;">
+            <div style="width:6px;height:6px;border-radius:50%;background:#d4a843;box-shadow:0 0 8px rgba(212,168,67,.7);animation:demoPulse 2s infinite;"></div>
+            <span style="font-family:'Geist',sans-serif;font-size:11px;font-weight:600;color:rgba(255,255,255,.5);">TaxShift PITCH · ABC Tecnologia</span>
+          </div>
+          <div style="padding:24px 28px;text-align:center;">
+            <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.2em;color:#46506e;margin-bottom:12px;">Variação Estimada na Carga Tributária</div>
+            <div style="font-family:'Instrument Serif',serif;font-size:64px;font-weight:700;color:#f87171;letter-spacing:-3px;line-height:1;text-shadow:0 0 60px rgba(248,113,113,.35);animation:pitchNum .8s ease .2s both;">+18,4%</div>
+            <div style="font-size:12px;color:rgba(255,255,255,.35);margin-top:8px;margin-bottom:20px;">Aumento estimado de R$52.000/ano com a reforma plena</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:380px;margin:0 auto;">
+              <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:12px;">
+                <div style="font-size:9px;color:#46506e;margin-bottom:4px;">CHECKLIST</div>
+                <div style="font-family:'Geist Mono',monospace;font-size:20px;font-weight:700;color:#d4a843;">12/30</div>
+              </div>
+              <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:12px;">
+                <div style="font-size:9px;color:#46506e;margin-bottom:4px;">URGÊNCIAS</div>
+                <div style="font-family:'Geist Mono',monospace;font-size:20px;font-weight:700;color:#f87171;">5</div>
+              </div>
+              <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:12px;">
+                <div style="font-size:9px;color:#46506e;margin-bottom:4px;">FATURAMENTO</div>
+                <div style="font-family:'Geist Mono',monospace;font-size:20px;font-weight:700;color:#5aabff;">R$1,2M</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Screen indicator dots -->
+        <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:6px;" id="demo-dots">
+          <div class="demo-dot active-dot" onclick="goScreen(1)"></div>
+          <div class="demo-dot" onclick="goScreen(2)"></div>
+          <div class="demo-dot" onclick="goScreen(3)"></div>
+          <div class="demo-dot" onclick="goScreen(4)"></div>
+        </div>
+
+      </div>
     </div>
+
+    <!-- Footer CTA -->
+    <div style="padding:14px 20px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.02);">
+      <div style="font-size:11px;color:rgba(255,255,255,.3);">4 telas · clique nos pontos para navegar</div>
+      <a href="cadastro.html?plano=pro" class="modal-btn modal-btn-gold" style="width:auto;padding:9px 20px;font-size:12px;display:inline-block;text-decoration:none;">Começar 7 dias grátis →</a>
+    </div>
+
   </div>
 </div>
 
@@ -1768,15 +735,15 @@ setTimeout(()=>{
     <div class="modal-title">Fale com a equipe</div>
     <div class="modal-sub">Escolha como prefere entrar em contato. Respondemos em até 2h úteis.</div>
     <div class="wa-options">
-      <a href="https://wa.me/5511999999999?text=Olá! Tenho interesse no TaxShift PRO para meu escritório contábil." target="_blank" class="wa-option">
+      <a href="https://wa.me/5511999999999?text=Olá%21+Tenho+interesse+no+TaxShift+PRO+para+meu+escritório+contábil.+Gostaria+de+saber+mais+sobre+os+planos." target="_blank" class="wa-option">
         <div class="wa-opt-icon">💬</div>
         <div><div class="wa-opt-title">WhatsApp</div><div class="wa-opt-sub">Resposta rápida · seg–sex 8h–18h</div></div>
       </a>
-      <a href="/cdn-cgi/l/email-protection#a8cbc7c6dcc9dcc7e8dcc9d0dbc0c1cedc86cbc7c586cada97dbddcac2cdcbdc95e1c6dccddacddbdbcd88c6c788fcc9d0fbc0c1cedc88f8fae7" class="wa-option">
+      <a href="mailto:contato@taxshift.com.br" class="wa-option" style="color:var(--green);text-decoration:none;font-weight:600;">
         <div class="wa-opt-icon">📧</div>
-        <div><div class="wa-opt-title">E-mail</div><div class="wa-opt-sub"><span class="__cf_email__" data-cfemail="b0d3dfdec4d1c4dff0c4d1c8c3d8d9d6c49ed3dfdd9ed2c2">[email&#160;protected]</span></div></div>
+        <div><div class="wa-opt-title">E-mail</div><div class="wa-opt-sub">contato@taxshift.com.br</div></div>
       </a>
-      <a href="#" onclick="showToast('Calendário de reuniões em breve! 📅');closeModal('modal-contato');" class="wa-option">
+      <a href="javascript:void(0)" onclick="showToast('Abrindo agenda... 📅');setTimeout(()=>{closeModal('modal-contato')},400);" class="wa-option">
         <div class="wa-opt-icon">📅</div>
         <div><div class="wa-opt-title">Agendar reunião</div><div class="wa-opt-sub">Google Meet · 30 minutos</div></div>
       </a>
@@ -1793,9 +760,9 @@ setTimeout(()=>{
       <p style="margin-bottom:12px;"><strong style="color:var(--ink)">1. Aceitação dos Termos</strong><br>Ao criar uma conta no TaxShift PRO, você concorda com estes Termos de Uso e nossa Política de Privacidade.</p>
       <p style="margin-bottom:12px;"><strong style="color:var(--ink)">2. Uso da Plataforma</strong><br>O TaxShift PRO é uma ferramenta de apoio para análise e simulação tributária. Os resultados são estimativas baseadas na EC 132/2023 e PLP 68/2024, e não constituem parecer jurídico ou fiscal formal.</p>
       <p style="margin-bottom:12px;"><strong style="color:var(--ink)">3. Propriedade dos Dados</strong><br>Os dados dos seus clientes pertencem exclusivamente ao seu escritório. Nunca compartilhamos informações entre escritórios diferentes. Você pode exportar ou excluir seus dados a qualquer momento.</p>
-      <p style="margin-bottom:12px;"><strong style="color:var(--ink)">4. Planos e Pagamentos</strong><br>Os planos são cobrados mensalmente por CNPJ do escritório. O trial de 14 dias não requer cartão de crédito. O cancelamento pode ser feito a qualquer momento, sem multa.</p>
+      <p style="margin-bottom:12px;"><strong style="color:var(--ink)">4. Planos e Pagamentos</strong><br>Os planos são cobrados mensalmente por CNPJ do escritório. O trial de 7 dias não requer cartão de crédito. O cancelamento pode ser feito a qualquer momento, sem multa.</p>
       <p style="margin-bottom:12px;"><strong style="color:var(--ink)">5. Limitação de Responsabilidade</strong><br>A TaxShift não se responsabiliza por decisões tomadas com base exclusivamente nas simulações da plataforma. Recomendamos sempre validar com a legislação vigente.</p>
-      <p style="font-size:11px;color:var(--ink4);margin-top:20px;">Última atualização: 19 de março de 2026 · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="482b27263c293c27083c29303b20212e3c662b2725662a3a">[email&#160;protected]</a></p>
+      <p style="font-size:11px;color:var(--ink4);margin-top:20px;">Última atualização: 19 de março de 2026 · <a href="mailto:contato@taxshift.com.br" style="color:var(--green);text-decoration:none;font-weight:600;">contato@taxshift.com.br</a></p>
     </div>
   </div>
 </div>
@@ -1809,5 +776,13 @@ setTimeout(()=>{
       <p style="margin-bottom:12px;"><strong style="color:var(--ink)">Dados coletados</strong><br>Coletamos apenas os dados necessários para operação da plataforma: e-mail, nome, CNPJ do escritório e dados dos clientes que você cadastra.</p>
       <p style="margin-bottom:12px;"><strong style="color:var(--ink)">Armazenamento</strong><br>Todos os dados são armazenados em servidores no Brasil com criptografia AES-256. Utilizamos Row Level Security (RLS) para garantir isolamento total entre escritórios.</p>
       <p style="margin-bottom:12px;"><strong style="color:var(--ink)">Compartilhamento</strong><br>Não vendemos nem compartilhamos seus dados com terceiros, exceto fornecedores de infraestrutura (Supabase, Vercel) sob contratos de confidencialidade.</p>
-      <p style="margin-bottom:12px;"><strong style="color:var(--ink)">LGPD</strong><br>Em conformidade com a Lei Geral de Proteção de Dados (Lei 13.709/2018). Você tem direito de acesso, correção e exclusão dos seus dados a qualquer momento.</p>
-      <p style="margin-bottom:12px;"><strong style="color:var(--ink)">Cookies</strong><br>Utilizamos apenas cookies essenciais para autenticaç
+      <p style="margin-bottom:12px;"><strong style="color:var(--ink)">Seus direitos</strong><br>Você pode solicitar acesso, correção ou exclusão de todos os seus dados a qualquer momento via painel ou e-mail. Atendemos em até 72h úteis.</p>
+      <p style="font-size:11px;color:var(--ink4);margin-top:20px;">Última atualização: 19 de março de 2026 · <a href="mailto:contato@taxshift.com.br" style="color:var(--green);text-decoration:none;font-weight:600;">contato@taxshift.com.br</a></p>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

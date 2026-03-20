@@ -188,7 +188,7 @@ function submitEnterprise() {
 function openApp() {
   closeModal('modal-demo');
   showToast('Abrindo TaxShift PRO... 🚀');
-  setTimeout(function () { window.location.href = '../crm/index.html'; }, 300);
+  setTimeout(function () { window.location.href = 'https://app.taxshift.com.br'; }, 300);
 }
 
 // ── TOAST ──
