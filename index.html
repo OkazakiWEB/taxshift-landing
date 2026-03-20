@@ -553,69 +553,71 @@
 
 <!-- ══ MODAL: DEMO ══ -->
 <div class="overlay" id="modal-demo" onclick="closeOnOverlay(event,'modal-demo')">
-  <div class="modal-box" style="max-width:780px;padding:0;overflow:hidden;background:#06080f;border:1px solid rgba(255,255,255,.08);border-radius:16px;">
+  <div class="modal-box dm-shell">
 
-    <!-- Header -->
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:6px;height:6px;border-radius:50%;background:#d4a843;box-shadow:0 0 8px rgba(212,168,67,.7);animation:demoPulse 2s infinite;"></div>
-        <span style="font-family:'Geist',sans-serif;font-size:13px;font-weight:600;color:rgba(255,255,255,.7);">TaxShift PRO — Preview interativo</span>
-      </div>
-      <button class="demo-close" onclick="closeModal('modal-demo')">✕</button>
+    <!-- Sidebar -->
+    <div class="dm-sb">
+      <div class="dm-logo">Tax<em>Shift</em> <span>PRO</span></div>
+      <div class="dm-sec">CRM</div>
+      <div class="dm-ni active-nav" id="dnav-1" onclick="goScreen(1,1)">🏠 Painel de Clientes</div>
+      <div class="dm-ni" id="dnav-2" onclick="goScreen(2,2)">📈 Métricas</div>
+      <div class="dm-ni" id="dnav-3" onclick="goScreen(2,3)">🏢 Empresa / PJ</div>
+      <div class="dm-ni" id="dnav-4" onclick="goScreen(3,4)">✅ Checklist</div>
+      <div class="dm-ni" id="dnav-5" onclick="goScreen(4,5)">🔔 Alertas <span class="dm-bc">3</span></div>
+      <div class="dm-ni" id="dnav-6" onclick="goScreen(4,6)">⚡ Cálculos</div>
+      <div class="dm-ni" id="dnav-7" onclick="goScreen(1,7)">📄 Relatório</div>
     </div>
 
-    <!-- Animated mockup area -->
-    <div class="demo-body">
+    <!-- Main -->
+    <div class="dm-main">
 
-      <!-- Sidebar mockup -->
-      <div class="demo-sidebar-mock" style="background:#0b0e1a;border-right:1px solid rgba(255,255,255,.06);padding:16px 0;display:flex;flex-direction:column;gap:2px;">
-        <div style="padding:10px 16px 14px;border-bottom:1px solid rgba(255,255,255,.05);margin-bottom:8px;">
-          <div style="font-family:'Instrument Serif',serif;font-size:14px;color:#fff;">Tax<span style="color:#d4a843;font-style:italic">Shift</span> <span style="font-size:9px;color:#d4a843;font-family:'Geist Mono',monospace">PRO</span></div>
+      <!-- Topbar -->
+      <div class="dm-topbar">
+        <div class="dm-topbar-t">TaxShift PRO — Preview interativo</div>
+        <div class="dm-topbar-r">
+          <div id="demo-dots" style="display:flex;gap:5px;align-items:center;">
+            <div class="demo-dot active-dot" onclick="goScreen(1)"></div>
+            <div class="demo-dot" onclick="goScreen(2)"></div>
+            <div class="demo-dot" onclick="goScreen(3)"></div>
+            <div class="demo-dot" onclick="goScreen(4)"></div>
+          </div>
+          <button class="dm-close" onclick="closeModal('modal-demo')">✕ Fechar</button>
         </div>
-        <div class="demo-nav-item active-nav" id="dnav-1" onclick="goScreen(1,1)">🏠 Painel de Clientes</div>
-        <div class="demo-nav-item" id="dnav-2" onclick="goScreen(2,2)">📈 Métricas</div>
-        <div class="demo-nav-item" id="dnav-3" onclick="goScreen(2,3)">🏢 Empresa / PJ</div>
-        <div class="demo-nav-item" id="dnav-4" onclick="goScreen(3,4)">✅ Checklist</div>
-        <div class="demo-nav-item" id="dnav-5" onclick="goScreen(4,5)">🔔 Alertas <span style="background:#f87171;color:#fff;font-size:8px;padding:1px 5px;border-radius:8px;margin-left:4px;">3</span></div>
-        <div class="demo-nav-item" id="dnav-6" onclick="goScreen(4,6)">⚡ Cálculos</div>
-        <div class="demo-nav-item" id="dnav-7" onclick="goScreen(1,7)">📄 Relatório</div>
       </div>
 
-      <!-- Content area - animated screens -->
-      <div class="demo-content-mock" style="position:relative;overflow:hidden;">
+      <!-- Screens -->
+      <div class="dm-content">
 
         <!-- SCREEN 1: Painel de Clientes -->
         <div class="demo-screen active-screen" id="dscreen-1">
-          <div style="padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px;font-weight:600;color:#fff;">Painel de Clientes</div>
+          <div style="padding:14px 16px;border-bottom:1px solid #e5e7eb;font-size:12px;font-weight:600;color:#0d0e11;">Painel de Clientes</div>
           <div style="padding:14px 16px;">
-            <!-- KPIs -->
             <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;">
-              <div class="demo-kpi" style="--c:#5aabff"><div class="demo-kpi-l">Clientes</div><div class="demo-kpi-v" style="color:#5aabff;animation:countUp1 2s ease forwards;">47</div></div>
-              <div class="demo-kpi" style="--c:#d4a843"><div class="demo-kpi-l">Faturamento</div><div class="demo-kpi-v" style="color:#d4a843">R$94M</div></div>
-              <div class="demo-kpi" style="--c:#f87171"><div class="demo-kpi-l">Urgências</div><div class="demo-kpi-v" style="color:#f87171;animation:countUp2 2s ease forwards;">12</div></div>
-              <div class="demo-kpi" style="--c:#34d399"><div class="demo-kpi-l">Compliance</div><div class="demo-kpi-v" style="color:#34d399">68%</div></div>
+              <div class="demo-kpi"><div class="demo-kpi-l">Clientes</div><div class="demo-kpi-v" style="color:#2563eb">47</div></div>
+              <div class="demo-kpi"><div class="demo-kpi-l">Faturamento</div><div class="demo-kpi-v" style="color:#c49a2a">R$94M</div></div>
+              <div class="demo-kpi"><div class="demo-kpi-l">Urgências</div><div class="demo-kpi-v" style="color:#dc2626">12</div></div>
+              <div class="demo-kpi"><div class="demo-kpi-l">Compliance</div><div class="demo-kpi-v" style="color:#16a34a">68%</div></div>
             </div>
-            <!-- Client cards -->
             <div style="display:flex;flex-direction:column;gap:7px;">
               <div class="demo-client-card" style="animation-delay:.1s">
-                <div style="width:30px;height:30px;border-radius:8px;background:rgba(74,158,255,.15);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#5aabff;flex-shrink:0;">AB</div>
-                <div style="flex:1"><div style="font-size:11px;font-weight:600;color:#dde2f2">ABC Tecnologia</div><div style="font-size:9px;color:#46506e">TI · Lucro Presumido</div></div>
-                <div style="text-align:right"><div style="font-size:10px;color:#f87171;font-weight:600">↑ Risco</div><div style="font-size:9px;color:#46506e">+18% carga</div></div>
+                <div style="width:30px;height:30px;border-radius:8px;background:#eff6ff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#2563eb;flex-shrink:0;">AB</div>
+                <div style="flex:1"><div style="font-size:11px;font-weight:600;color:#0d0e11">ABC Tecnologia</div><div style="font-size:9px;color:#6b7280">TI · Lucro Presumido</div></div>
+                <div style="text-align:right"><div style="font-size:10px;color:#dc2626;font-weight:600">↑ Risco</div><div style="font-size:9px;color:#6b7280">+18% carga</div></div>
               </div>
               <div class="demo-client-card" style="animation-delay:.2s">
-                <div style="width:30px;height:30px;border-radius:8px;background:rgba(52,211,153,.15);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#34d399;flex-shrink:0;">PS</div>
-                <div style="flex:1"><div style="font-size:11px;font-weight:600;color:#dde2f2">Padaria Sabor</div><div style="font-size:9px;color:#46506e">Alimentos · Simples</div></div>
-                <div style="text-align:right"><div style="font-size:10px;color:#34d399;font-weight:600">✓ OK</div><div style="font-size:9px;color:#46506e">-15% carga</div></div>
+                <div style="width:30px;height:30px;border-radius:8px;background:#f0fdf4;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#16a34a;flex-shrink:0;">PS</div>
+                <div style="flex:1"><div style="font-size:11px;font-weight:600;color:#0d0e11">Padaria Sabor</div><div style="font-size:9px;color:#6b7280">Alimentos · Simples</div></div>
+                <div style="text-align:right"><div style="font-size:10px;color:#16a34a;font-weight:600">✓ OK</div><div style="font-size:9px;color:#6b7280">-15% carga</div></div>
               </div>
               <div class="demo-client-card" style="animation-delay:.3s">
-                <div style="width:30px;height:30px;border-radius:8px;background:rgba(212,168,67,.15);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#d4a843;flex-shrink:0;">CH</div>
-                <div style="flex:1"><div style="font-size:11px;font-weight:600;color:#dde2f2">Construtora Horizonte</div><div style="font-size:9px;color:#46506e">Construção · Lucro Real</div></div>
-                <div style="text-align:right"><div style="font-size:10px;color:#fbbf24;font-weight:600">⚠ Atenção</div><div style="font-size:9px;color:#46506e">checklist 20%</div></div>
+                <div style="width:30px;height:30px;border-radius:8px;background:#fefce8;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#c49a2a;flex-shrink:0;">CH</div>
+                <div style="flex:1"><div style="font-size:11px;font-weight:600;color:#0d0e11">Construtora Horizonte</div><div style="font-size:9px;color:#6b7280">Construção · Lucro Real</div></div>
+                <div style="text-align:right"><div style="font-size:10px;color:#d97706;font-weight:600">⚠ Atenção</div><div style="font-size:9px;color:#6b7280">checklist 20%</div></div>
               </div>
               <div class="demo-client-card" style="animation-delay:.4s">
-                <div style="width:30px;height:30px;border-radius:8px;background:rgba(167,139,250,.15);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#a78bfa;flex-shrink:0;">MC</div>
-                <div style="flex:1"><div style="font-size:11px;font-weight:600;color:#dde2f2">MedCenter Saúde</div><div style="font-size:9px;color:#46506e">Saúde · Lucro Presumido</div></div>
-                <div style="text-align:right"><div style="font-size:10px;color:#34d399;font-weight:600">✓ OK</div><div style="font-size:9px;color:#46506e">-8% carga</div></div>
+                <div style="width:30px;height:30px;border-radius:8px;background:#f5f3ff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#7c3aed;flex-shrink:0;">MC</div>
+                <div style="flex:1"><div style="font-size:11px;font-weight:600;color:#0d0e11">MedCenter Saúde</div><div style="font-size:9px;color:#6b7280">Saúde · Lucro Presumido</div></div>
+                <div style="text-align:right"><div style="font-size:10px;color:#16a34a;font-weight:600">✓ OK</div><div style="font-size:9px;color:#6b7280">-8% carga</div></div>
               </div>
             </div>
           </div>
@@ -623,35 +625,22 @@
 
         <!-- SCREEN 2: Simulador -->
         <div class="demo-screen" id="dscreen-2">
-          <div style="padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px;font-weight:600;color:#fff;">Simulador Empresa / PJ</div>
+          <div style="padding:14px 16px;border-bottom:1px solid #e5e7eb;font-size:12px;font-weight:600;color:#0d0e11;">Simulador Empresa / PJ</div>
           <div style="padding:14px 16px;">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
-              <div>
-                <div class="demo-field-label">Faturamento Anual</div>
-                <div class="demo-field-val">R$ 1.200.000</div>
-              </div>
-              <div>
-                <div class="demo-field-label">Regime</div>
-                <div class="demo-field-val">Lucro Presumido</div>
-              </div>
-              <div>
-                <div class="demo-field-label">Setor</div>
-                <div class="demo-field-val">Serviços</div>
-              </div>
-              <div>
-                <div class="demo-field-label">Fase</div>
-                <div class="demo-field-val">2033 — Sistema Pleno</div>
-              </div>
+              <div><div class="demo-field-label">Faturamento Anual</div><div class="demo-field-val">R$ 1.200.000</div></div>
+              <div><div class="demo-field-label">Regime</div><div class="demo-field-val">Lucro Presumido</div></div>
+              <div><div class="demo-field-label">Setor</div><div class="demo-field-val">Serviços</div></div>
+              <div><div class="demo-field-label">Fase</div><div class="demo-field-val">2033 — Sistema Pleno</div></div>
             </div>
-            <!-- Result banner animated -->
-            <div style="background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:10px;padding:16px;margin-bottom:10px;animation:slideIn .5s ease .3s both;">
-              <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#f87171;margin-bottom:6px;">Variação na Carga Tributária</div>
-              <div style="font-family:'Instrument Serif',serif;font-size:38px;font-weight:700;color:#f87171;letter-spacing:-1px;line-height:1;">+18,4%</div>
-              <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:4px;">Aumento estimado de R$ 52.000/ano · Fase 2033</div>
+            <div style="background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;padding:16px;margin-bottom:10px;animation:slideIn .5s ease .3s both;">
+              <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#dc2626;margin-bottom:6px;">Variação na Carga Tributária</div>
+              <div style="font-family:'Instrument Serif',serif;font-size:38px;font-weight:700;color:#dc2626;letter-spacing:-1px;line-height:1;">+18,4%</div>
+              <div style="font-size:11px;color:#6b7280;margin-top:4px;">Aumento estimado de R$ 52.000/ano · Fase 2033</div>
             </div>
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
-              <div class="demo-kpi" style="animation:slideIn .5s ease .5s both"><div class="demo-kpi-l">Carga Atual</div><div class="demo-kpi-v" style="color:#5aabff">15,0%</div></div>
-              <div class="demo-kpi" style="animation:slideIn .5s ease .6s both"><div class="demo-kpi-l">Carga Nova</div><div class="demo-kpi-v" style="color:#f87171">17,8%</div></div>
+              <div class="demo-kpi" style="animation:slideIn .5s ease .5s both"><div class="demo-kpi-l">Carga Atual</div><div class="demo-kpi-v" style="color:#2563eb">15,0%</div></div>
+              <div class="demo-kpi" style="animation:slideIn .5s ease .6s both"><div class="demo-kpi-l">Carga Nova</div><div class="demo-kpi-v" style="color:#dc2626">17,8%</div></div>
               <div class="demo-kpi" style="animation:slideIn .5s ease .7s both"><div class="demo-kpi-l">IS Adicional</div><div class="demo-kpi-v" style="color:#46506e">R$ 0</div></div>
             </div>
           </div>
@@ -659,40 +648,38 @@
 
         <!-- SCREEN 3: Checklist -->
         <div class="demo-screen" id="dscreen-3">
-          <div style="padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px;font-weight:600;color:#fff;">Checklist de Compliance</div>
+          <div style="padding:14px 16px;border-bottom:1px solid #e5e7eb;font-size:12px;font-weight:600;color:#0d0e11;">Checklist de Compliance</div>
           <div style="padding:14px 16px;">
-            <!-- Progress ring mockup -->
-            <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;padding:12px;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid rgba(255,255,255,.06);">
+            <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;padding:12px;background:#fff;border-radius:8px;border:1px solid #e5e7eb;">
               <div style="position:relative;width:52px;height:52px;flex-shrink:0;">
-                <svg width="52" height="52" style="transform:rotate(-90deg)"><circle cx="26" cy="26" r="20" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="5"/><circle cx="26" cy="26" r="20" fill="none" stroke="#d4a843" stroke-width="5" stroke-dasharray="125.6" stroke-dashoffset="75" stroke-linecap="round" style="transition:stroke-dashoffset .8s"/></svg>
-                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:11px;font-weight:600;color:#d4a843;">40%</div>
+                <svg width="52" height="52" style="transform:rotate(-90deg)"><circle cx="26" cy="26" r="20" fill="none" stroke="#e5e7eb" stroke-width="5"/><circle cx="26" cy="26" r="20" fill="none" stroke="#c49a2a" stroke-width="5" stroke-dasharray="125.6" stroke-dashoffset="75" stroke-linecap="round"/></svg>
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Geist Mono',monospace;font-size:11px;font-weight:600;color:#c49a2a;">40%</div>
               </div>
               <div>
-                <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:2px;">12 de 30 ações</div>
-                <div style="font-size:10px;color:#46506e;">18 pendentes · 5 urgentes</div>
+                <div style="font-size:13px;font-weight:600;color:#0d0e11;margin-bottom:2px;">12 de 30 ações</div>
+                <div style="font-size:10px;color:#6b7280;">18 pendentes · 5 urgentes</div>
               </div>
             </div>
-            <!-- Checklist items -->
             <div style="display:flex;flex-direction:column;gap:6px;">
               <div class="demo-cl-item done-item" style="animation-delay:.1s">
                 <div class="demo-cl-check done">✓</div>
                 <div style="flex:1"><div class="demo-cl-title done-title">Diagnóstico tributário completo</div><div class="demo-cl-sub">Concluído em 15/03/2026</div></div>
-                <span style="font-size:9px;background:rgba(52,211,153,.1);color:#34d399;padding:1px 7px;border-radius:3px;font-weight:700;">FEITO</span>
+                <span style="font-size:9px;background:#dcfce7;color:#16a34a;padding:1px 7px;border-radius:3px;font-weight:700;">FEITO</span>
               </div>
               <div class="demo-cl-item urg-item" style="animation-delay:.2s">
                 <div class="demo-cl-check urg">!</div>
                 <div style="flex:1"><div class="demo-cl-title">Adaptação do ERP para CBS/IBS</div><div class="demo-cl-sub">Prazo: jan/2026 — CBS já está ativa</div></div>
-                <span style="font-size:9px;background:rgba(248,113,113,.1);color:#f87171;padding:1px 7px;border-radius:3px;font-weight:700;">URGENTE</span>
+                <span style="font-size:9px;background:#fee2e2;color:#dc2626;padding:1px 7px;border-radius:3px;font-weight:700;">URGENTE</span>
               </div>
               <div class="demo-cl-item urg-item" style="animation-delay:.3s">
                 <div class="demo-cl-check urg">!</div>
                 <div style="flex:1"><div class="demo-cl-title">Revisão de contratos de longo prazo</div><div class="demo-cl-sub">Incluir cláusulas de reajuste tributário</div></div>
-                <span style="font-size:9px;background:rgba(248,113,113,.1);color:#f87171;padding:1px 7px;border-radius:3px;font-weight:700;">URGENTE</span>
+                <span style="font-size:9px;background:#fee2e2;color:#dc2626;padding:1px 7px;border-radius:3px;font-weight:700;">URGENTE</span>
               </div>
               <div class="demo-cl-item pend-item" style="animation-delay:.4s">
                 <div class="demo-cl-check pend"></div>
                 <div style="flex:1"><div class="demo-cl-title">Treinamento da equipe fiscal</div><div class="demo-cl-sub">CBS, IBS, Split Payment e não-cumulatividade</div></div>
-                <span style="font-size:9px;background:rgba(251,191,36,.08);color:#fbbf24;padding:1px 7px;border-radius:3px;font-weight:700;">PENDENTE</span>
+                <span style="font-size:9px;background:#fef9c3;color:#d97706;padding:1px 7px;border-radius:3px;font-weight:700;">PENDENTE</span>
               </div>
             </div>
           </div>
@@ -725,24 +712,16 @@
           </div>
         </div>
 
-        <!-- Screen indicator dots -->
-        <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);display:flex;gap:6px;" id="demo-dots">
-          <div class="demo-dot active-dot" onclick="goScreen(1)"></div>
-          <div class="demo-dot" onclick="goScreen(2)"></div>
-          <div class="demo-dot" onclick="goScreen(3)"></div>
-          <div class="demo-dot" onclick="goScreen(4)"></div>
-        </div>
+      </div><!-- /.dm-content -->
 
+      <!-- Footer -->
+      <div class="dm-footer">
+        <span class="dm-footer-note">4 telas · clique nos pontos para navegar</span>
+        <a href="cadastro.html?plano=pro" class="modal-btn modal-btn-gold" style="width:auto;padding:9px 20px;font-size:12px;display:inline-block;text-decoration:none;">Começar 7 dias grátis →</a>
       </div>
-    </div>
 
-    <!-- Footer CTA -->
-    <div style="padding:14px 20px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.02);">
-      <div style="font-size:11px;color:rgba(255,255,255,.3);">4 telas · clique nos pontos para navegar</div>
-      <a href="cadastro.html?plano=pro" class="modal-btn modal-btn-gold" style="width:auto;padding:9px 20px;font-size:12px;display:inline-block;text-decoration:none;">Começar 7 dias grátis →</a>
-    </div>
-
-  </div>
+    </div><!-- /.dm-main -->
+  </div><!-- /.dm-shell -->
 </div>
 
 <!-- ══ MODAL: CONTATO ══ -->
