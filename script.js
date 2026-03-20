@@ -122,13 +122,7 @@ function openModal(e, type, plan) {
   if (overlay) {
     overlay.classList.add('show');
     _currentModal = id;
-    // iOS scroll lock (position:fixed trick)
-    var sy = window.scrollY;
-    document._modalScrollY = sy;
-    document.body.style.position = 'fixed';
-    document.body.style.top = '-' + sy + 'px';
-    document.body.style.width = '100%';
-    document.body.style.overflow = 'hidden';
+    document.documentElement.classList.add('modal-open');
     if (type === 'demo') {
       goScreen(1);
       setTimeout(startDemoLoop, 600);
@@ -144,9 +138,7 @@ function openPage(e, type) {
   var overlay = document.getElementById(id);
   if (overlay) {
     overlay.classList.add('show'); _currentModal = id;
-    var sy = window.scrollY; document._modalScrollY = sy;
-    document.body.style.position = 'fixed'; document.body.style.top = '-' + sy + 'px';
-    document.body.style.width = '100%'; document.body.style.overflow = 'hidden';
+    document.documentElement.classList.add('modal-open');
   }
 }
 
@@ -156,13 +148,7 @@ function closeModal(id) {
   if (overlay) overlay.classList.remove('show');
   if (targetId === 'modal-demo') stopDemoLoop();
   _currentModal = null;
-  // Restore iOS scroll lock
-  var sy = document._modalScrollY || 0;
-  document.body.style.position = '';
-  document.body.style.top = '';
-  document.body.style.width = '';
-  document.body.style.overflow = '';
-  window.scrollTo(0, sy);
+  document.documentElement.classList.remove('modal-open');
 }
 
 function closeOnOverlay(e, id) {
@@ -175,9 +161,7 @@ function switchModal(from, to) {
     var overlay = document.getElementById(to);
     if (overlay) {
       overlay.classList.add('show'); _currentModal = to;
-      var sy = window.scrollY; document._modalScrollY = sy;
-      document.body.style.position = 'fixed'; document.body.style.top = '-' + sy + 'px';
-      document.body.style.width = '100%'; document.body.style.overflow = 'hidden';
+      document.documentElement.classList.add('modal-open');
     }
   }, 200);
 }

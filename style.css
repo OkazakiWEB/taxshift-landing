@@ -21,6 +21,7 @@
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;font-size:16px;}
 html{overflow-x:clip;}
+html.modal-open{overflow:hidden;}
 body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--ink);overflow-x:clip;-webkit-font-smoothing:antialiased;}
 
 /* ── SCROLLBAR ── */
@@ -738,7 +739,7 @@ footer{
 
 /* ══ MODALS & OVERLAYS ══ */
 .overlay{
-  position:fixed;inset:0;z-index:500;
+  position:fixed;inset:0;z-index:1000;
   background:rgba(13,14,17,.6);
   backdrop-filter:blur(6px);
   display:flex;align-items:center;justify-content:center;
