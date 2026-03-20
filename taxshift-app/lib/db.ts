@@ -366,6 +366,64 @@ export async function updateProfile(
   }
 }
 
+// ─── Simulations ──────────────────────────────────────────────────────────────
+
+export interface Simulation {
+  id: string
+  user_id: string
+  client_id: string | null
+  company_name: string
+  regime: string
+  sector: string
+  revenue: number
+  state: string | null
+  impact_percent: number | null
+  impact_annual: number | null
+  current_burden: number | null
+  new_burden_2033: number | null
+  recommendation: string | null
+  created_at: string
+}
+
+export async function saveSimulation(
+  data: Omit<Simulation, 'id' | 'user_id' | 'created_at'>
+): Promise<void> {
+  try {
+    const supabase = createClient()
+    const {
+      data: { user },
+    } = await supabase.auth.getUser()
+    if (!user) return
+
+    const { error } = await supabase
+      .from('simulations')
+      .insert({ ...data, user_id: user.id })
+
+    if (error) console.error('[db] saveSimulation error:', error.message)
+  } catch (err) {
+    console.error('[db] saveSimulation unexpected error:', err)
+  }
+}
+
+export async function getSimulations(): Promise<Simulation[]> {
+  try {
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from('simulations')
+      .select('*')
+      .order('created_at', { ascending: false })
+
+    if (error) {
+      console.error('[db] getSimulations error:', error.message)
+      return []
+    }
+    return (data ?? []) as Simulation[]
+  } catch (err) {
+    console.error('[db] getSimulations unexpected error:', err)
+    return []
+  }
+}
+
 export async function ensureProfile(
   userId: string,
   email: string,

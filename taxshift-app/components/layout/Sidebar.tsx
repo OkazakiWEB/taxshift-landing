@@ -25,6 +25,19 @@ const navItems: NavItem[] = [
     ),
   },
   {
+    href: '/simulador',
+    label: 'Simulador',
+    icon: (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <rect x="2" y="3" width="20" height="14" rx="2"/>
+        <line x1="8" y1="21" x2="16" y2="21"/>
+        <line x1="12" y1="17" x2="12" y2="21"/>
+        <path d="M7 8h4M7 12h2"/>
+        <path d="M15 8l2 2-2 2"/>
+      </svg>
+    ),
+  },
+  {
     href: '/clientes',
     label: 'Clientes',
     icon: (

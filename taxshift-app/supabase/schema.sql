@@ -67,6 +67,26 @@ create policy "own_clients" on clients for all using (auth.uid() = user_id) with
 create policy "own_documents" on documents for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 create policy "own_alerts" on alerts for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
 
+-- SIMULATIONS
+create table if not exists simulations (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid references auth.users on delete cascade not null,
+  client_id uuid references clients(id) on delete set null,
+  company_name text not null,
+  regime text not null,
+  sector text not null,
+  revenue numeric not null,
+  state text,
+  impact_percent numeric,
+  impact_annual numeric,
+  current_burden numeric,
+  new_burden_2033 numeric,
+  recommendation text,
+  created_at timestamptz default now()
+);
+alter table simulations enable row level security;
+create policy "own_simulations" on simulations for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
 -- Auto-create profile on signup
 create or replace function handle_new_user()
 returns trigger language plpgsql security definer as $$
