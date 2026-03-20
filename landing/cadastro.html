@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Criar conta — TaxShift PRO</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;}
+
+/* ── TOP NAV ── */
+.reg-nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:0 32px;height:58px;
+  background:rgba(250,250,248,.9);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.reg-logo{font-family:'Instrument Serif',serif;font-size:20px;color:var(--ink);text-decoration:none;}
+.reg-logo span{color:var(--gold);}
+.reg-login-link{font-size:13px;color:var(--ink3);}
+.reg-login-link a{color:var(--ink);font-weight:600;text-decoration:none;}
+.reg-login-link a:hover{color:var(--gold);}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap{
+  max-width:520px;margin:0 auto;
+  padding:0 24px;margin-top:94px;margin-bottom:32px;
+}
+.progress-steps{
+  display:flex;align-items:center;gap:0;
+  position:relative;
+}
+.progress-steps::before{
+  content:'';position:absolute;top:50%;left:0;right:0;height:1px;
+  background:var(--line);transform:translateY(-50%);z-index:0;
+}
+.prog-step{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  flex:1;position:relative;z-index:1;
+}
+.prog-dot{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--white);border:2px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:var(--ink4);
+  transition:all .3s;
+}
+.prog-dot.active{background:var(--ink);border-color:var(--ink);color:#fff;}
+.prog-dot.done{background:var(--green);border-color:var(--green);color:#fff;font-size:13px;}
+.prog-lbl{font-size:10px;font-weight:500;color:var(--ink4);white-space:nowrap;transition:color .3s;}
+.prog-step.active .prog-lbl{color:var(--ink);}
+.prog-step.done .prog-lbl{color:var(--green);}
+
+/* ── CARD ── */
+.reg-card{
+  max-width:520px;margin:0 auto;
+  background:var(--white);border:1px solid var(--line);
+  border-radius:16px;padding:36px;
+  box-shadow:0 4px 24px rgba(13,14,17,.06);
+  margin-bottom:32px;
+}
+
+/* ── STEP HEADER ── */
+.step-head{margin-bottom:24px;}
+.step-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);margin-bottom:8px;}
+.step-title{font-family:'Instrument Serif',serif;font-size:24px;font-weight:400;color:var(--ink);margin-bottom:6px;}
+.step-sub{font-size:13px;color:var(--ink3);line-height:1.6;}
+
+/* ── PLAN PILL ── */
+.plan-selected-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  border-radius:20px;padding:5px 14px;
+  font-size:11px;font-weight:600;letter-spacing:.03em;
+  margin-bottom:20px;
+}
+.pill-free{background:var(--line2);color:var(--ink3);border:1px solid var(--line);}
+.pill-basico{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;}
+.pill-pro{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-border);}
+.pill-enterprise{background:#ede9fe;color:#6d28d9;border:1px solid #ddd6fe;}
+
+/* ── FORM ELEMENTS ── */
+.fg{margin-bottom:14px;}
+.fg label{display:block;font-size:11px;font-weight:600;color:var(--ink3);margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em;}
+.fg input,.fg select,.fg textarea{
+  width:100%;background:var(--bg);border:1.5px solid var(--line);
+  border-radius:9px;padding:11px 14px;
+  font-family:'Geist',sans-serif;font-size:13px;color:var(--ink);
+  outline:none;transition:border-color .15s;
+}
+.fg input:focus,.fg select:focus{border-color:var(--ink3);}
+.fg input::placeholder{color:var(--ink4);}
+.fg select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath fill='%236b7280' d='M6 7L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:500px){.g2{grid-template-columns:1fr;}}
+
+.google-btn{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;padding:11px 16px;
+  background:var(--white);border:1.5px solid var(--line);
+  border-radius:9px;cursor:pointer;
+  font-family:'Geist',sans-serif;font-size:13px;font-weight:500;
+  color:var(--ink2);text-decoration:none;
+  transition:all .18s;margin-bottom:18px;
+}
+.google-btn:hover{border-color:var(--ink3);box-shadow:0 2px 8px rgba(13,14,17,.06);}
+
+.auth-divider{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:18px;font-size:12px;color:var(--ink4);
+}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--line);}
+
+.auth-input-wrap{position:relative;margin-bottom:14px;}
+.auth-input-wrap input{margin-bottom:0;}
+.input-toggle{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;color:var(--ink4);font-size:14px;
+}
+
+/* ── PLAN CARDS ── */
+.plan-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;}
+@media(max-width:500px){.plan-opts{grid-template-columns:1fr;}}
+.plan-opt{
+  border:2px solid var(--line);border-radius:10px;padding:14px 16px;
+  cursor:pointer;transition:all .2s;position:relative;
+  background:var(--white);
+}
+.plan-opt:hover{border-color:var(--ink3);}
+.plan-opt.selected{border-color:var(--gold);background:var(--gold-bg);}
+.plan-opt.popular::before{
+  content:'Mais popular';position:absolute;top:-10px;left:50%;transform:translateX(-50%);
+  background:var(--gold);color:var(--ink);font-size:9px;font-weight:700;letter-spacing:.06em;
+  padding:2px 10px;border-radius:10px;white-space:nowrap;text-transform:uppercase;
+}
+.plan-opt-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);margin-bottom:4px;}
+.plan-opt.selected .plan-opt-name{color:var(--gold);}
+.plan-opt-price{font-family:'Geist Mono',monospace;font-size:22px;font-weight:700;color:var(--ink);line-height:1;margin-bottom:4px;}
+.plan-opt.selected .plan-opt-price{color:var(--ink);}
+.plan-opt-clients{font-size:11px;color:var(--ink4);}
+.plan-opt.selected .plan-opt-clients{color:var(--gold);}
+.plan-opt-radio{position:absolute;top:12px;right:12px;width:16px;height:16px;border-radius:50%;border:2px solid var(--line);background:var(--white);transition:all .2s;}
+.plan-opt.selected .plan-opt-radio{border-color:var(--gold);background:var(--gold);}
+.plan-opt.selected .plan-opt-radio::after{content:'';display:block;width:6px;height:6px;border-radius:50%;background:#fff;margin:3px auto;}
+
+/* ── BUTTONS ── */
+.btn-primary-full{
+  display:block;width:100%;padding:13px;
+  background:var(--ink);border:none;border-radius:9px;
+  font-family:'Geist',sans-serif;font-size:14px;font-weight:600;
+  color:#fff;cursor:pointer;transition:all .18s;
+  text-align:center;text-decoration:none;
+}
+.btn-primary-full:hover{background:var(--ink2);transform:translateY(-1px);box-shadow:0 4px 14px rgba(13,14,17,.18);}
+.btn-ghost-full{
+  display:block;width:100%;padding:11px;margin-top:10px;
+  background:transparent;border:1.5px solid var(--line);border-radius:9px;
+  font-family:'Geist',sans-serif;font-size:13px;font-weight:500;
+  color:var(--ink3);cursor:pointer;transition:all .18s;text-align:center;
+}
+.btn-ghost-full:hover{border-color:var(--ink3);color:var(--ink);}
+
+/* ── SUCCESS ── */
+.success-wrap{text-align:center;padding:8px 0;}
+.success-icon{font-size:52px;margin-bottom:16px;display:block;}
+.success-title{font-family:'Instrument Serif',serif;font-size:26px;color:var(--ink);margin-bottom:8px;}
+.success-sub{font-size:14px;color:var(--ink3);line-height:1.7;margin-bottom:28px;}
+.btn-gold-full{
+  display:block;width:100%;padding:13px;
+  background:var(--gold);border:none;border-radius:9px;
+  font-family:'Geist',sans-serif;font-size:14px;font-weight:700;
+  color:var(--ink);cursor:pointer;transition:all .18s;text-decoration:none;
+  text-align:center;margin-bottom:10px;
+}
+.btn-gold-full:hover{background:#d4a843;transform:translateY(-1px);box-shadow:0 4px 14px rgba(196,154,42,.3);}
+.success-note{font-size:11px;color:var(--ink4);line-height:1.7;}
+.success-checklist{
+  background:var(--line2);border:1px solid var(--line);
+  border-radius:10px;padding:16px;margin-bottom:24px;text-align:left;
+}
+.success-item{
+  display:flex;align-items:center;gap:10px;
+  font-size:13px;color:var(--ink2);padding:5px 0;
+}
+.success-item .ic{color:var(--green);font-size:14px;}
+
+/* ── TRIAL BADGE ── */
+.trial-note{
+  display:flex;align-items:center;gap:8px;
+  background:var(--green-bg);border:1px solid #bbf7d0;
+  border-radius:8px;padding:10px 14px;
+  font-size:12px;color:var(--green);font-weight:600;
+  margin-bottom:20px;
+}
+
+/* ── TERMS NOTE ── */
+.terms-note{font-size:11px;color:var(--ink4);text-align:center;margin-top:14px;line-height:1.6;}
+.terms-note a{color:var(--ink3);text-decoration:underline;}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:var(--ink);color:#fff;
+  display:flex;align-items:center;gap:10px;
+  padding:11px 20px;border-radius:50px;
+  font-size:13px;font-weight:500;
+  box-shadow:0 8px 24px rgba(13,14,17,.2);
+  transition:transform .3s cubic-bezier(.4,0,.2,1),opacity .3s;
+  opacity:0;z-index:999;white-space:nowrap;pointer-events:none;
+}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+/* ── PAGE ANIMATION ── */
+.reg-step{display:none;animation:fadeStep .25s ease;}
+.reg-step.active{display:block;}
+@keyframes fadeStep{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:580px){
+  .reg-card{padding:24px 20px;margin:0 12px 24px;}
+  .progress-wrap{padding:0 20px;margin-top:80px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="reg-nav">
+  <a href="index.html" class="reg-logo">Tax<span>Shift</span> PRO</a>
+  <div class="reg-login-link">Já tem conta? <a href="login.html">Entrar</a></div>
+</nav>
+
+<!-- ── PROGRESS ── -->
+<div class="progress-wrap">
+  <div class="progress-steps">
+    <div class="prog-step active" id="ps-1">
+      <div class="prog-dot active" id="pd-1">1</div>
+      <div class="prog-lbl">Conta</div>
+    </div>
+    <div class="prog-step" id="ps-2">
+      <div class="prog-dot" id="pd-2">2</div>
+      <div class="prog-lbl">Escritório</div>
+    </div>
+    <div class="prog-step" id="ps-3">
+      <div class="prog-dot" id="pd-3">3</div>
+      <div class="prog-lbl">Plano</div>
+    </div>
+    <div class="prog-step" id="ps-4">
+      <div class="prog-dot" id="pd-4">4</div>
+      <div class="prog-lbl">Pronto!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CARD ── -->
+<div class="reg-card" id="reg-card">
+
+  <!-- ══ STEP 1: CONTA ══ -->
+  <div class="reg-step active" id="step-1">
+    <div class="step-head">
+      <div class="step-tag">Passo 1 de 3</div>
+      <h2 class="step-title">Criar sua conta</h2>
+      <p class="step-sub">Gratuito para sempre nos primeiros 5 clientes. Sem cartão de crédito.</p>
+    </div>
+
+    <div class="trial-note">
+      <span>✓</span> <span id="trial-text">7 dias grátis · cancele quando quiser · sem cartão</span>
+    </div>
+
+    <a href="#" class="google-btn" onclick="cadastroGoogle(event)">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
+      Cadastrar com Google
+    </a>
+    <div class="auth-divider">ou preencha manualmente</div>
+
+    <div class="g2">
+      <div class="fg" style="margin:0"><label>Nome</label><input type="text" id="c-nome" placeholder="Seu nome"></div>
+      <div class="fg" style="margin:0"><label>Sobrenome</label><input type="text" id="c-sobrenome" placeholder="Sobrenome"></div>
+    </div>
+    <div style="height:14px"></div>
+    <div class="fg"><label>E-mail profissional</label><input type="email" id="c-email" placeholder="voce@escritorio.com.br"></div>
+    <div class="auth-input-wrap">
+      <input class="fg" type="password" id="c-senha" placeholder="Criar senha (mín. 8 caracteres)" style="width:100%;background:var(--bg);border:1.5px solid var(--line);border-radius:9px;padding:11px 44px 11px 14px;font-family:'Geist',sans-serif;font-size:13px;color:var(--ink);outline:none;transition:border-color .15s;margin-bottom:0;">
+      <button class="input-toggle" onclick="toggleSenha('c-senha',this)" tabindex="-1" type="button">👁</button>
+    </div>
+    <div id="senha-strength" style="font-size:11px;color:var(--ink4);margin:4px 0 14px;height:14px;"></div>
+
+    <button class="btn-primary-full" onclick="irPasso2()">Continuar →</button>
+    <div class="terms-note">
+      Ao criar uma conta você concorda com os
+      <a href="javascript:void(0)" onclick="abrirTermos()">Termos de Uso</a> e a
+      <a href="javascript:void(0)" onclick="abrirPrivacidade()">Política de Privacidade</a>.
+    </div>
+  </div>
+
+  <!-- ══ STEP 2: ESCRITÓRIO ══ -->
+  <div class="reg-step" id="step-2">
+    <div class="step-head">
+      <div class="step-tag">Passo 2 de 3</div>
+      <h2 class="step-title">Sobre seu escritório</h2>
+      <p class="step-sub">Para configurar sua conta e personalizar o TaxShift para sua realidade.</p>
+    </div>
+
+    <div class="fg"><label>Nome do escritório</label><input type="text" id="c-escritorio" placeholder="Ex.: Silva & Associados Contabilidade"></div>
+    <div class="g2">
+      <div class="fg"><label>CNPJ (opcional)</label><input type="text" id="c-cnpj" placeholder="00.000.000/0001-00" oninput="mascaraCNPJ(this)"></div>
+      <div class="fg"><label>CRC do responsável</label><input type="text" id="c-crc" placeholder="CRC/SP 123456/O-7"></div>
+    </div>
+    <div class="fg">
+      <label>Quantos clientes você atende hoje?</label>
+      <select id="c-clientes">
+        <option value="">Selecione...</option>
+        <option value="ate5">Até 5 clientes</option>
+        <option value="6a20">6 a 20 clientes</option>
+        <option value="21a60">21 a 60 clientes</option>
+        <option value="mais60">Mais de 60 clientes</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label>Qual seu principal desafio hoje?</label>
+      <select id="c-desafio">
+        <option value="">Selecione...</option>
+        <option value="calculos">Calcular o impacto da reforma para cada cliente</option>
+        <option value="compliance">Controlar o checklist de adequação da carteira</option>
+        <option value="relatorios">Gerar relatórios profissionais para apresentar</option>
+        <option value="alertas">Acompanhar as mudanças na legislação</option>
+        <option value="tudo">Tudo acima</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label>Como nos encontrou?</label>
+      <select id="c-origem">
+        <option value="">Selecione...</option>
+        <option>Google</option>
+        <option>LinkedIn</option>
+        <option>Indicação de colega</option>
+        <option>Redes sociais</option>
+        <option>Evento / webinar</option>
+        <option>Outro</option>
+      </select>
+    </div>
+
+    <button class="btn-primary-full" onclick="irPasso3()">Escolher plano →</button>
+    <button class="btn-ghost-full" onclick="voltarPasso(1)">← Voltar</button>
+  </div>
+
+  <!-- ══ STEP 3: PLANO ══ -->
+  <div class="reg-step" id="step-3">
+    <div class="step-head">
+      <div class="step-tag">Passo 3 de 3</div>
+      <h2 class="step-title">Escolha seu plano</h2>
+      <p class="step-sub">Comece grátis. Faça upgrade quando precisar. Sem compromisso.</p>
+    </div>
+
+    <div class="plan-opts" id="plan-opts">
+      <div class="plan-opt" data-plan="free" onclick="selecionarPlano(this)">
+        <div class="plan-opt-radio"></div>
+        <div class="plan-opt-name">Gratuito</div>
+        <div class="plan-opt-price">R$0</div>
+        <div class="plan-opt-clients">5 clientes · para sempre</div>
+      </div>
+      <div class="plan-opt" data-plan="basico" onclick="selecionarPlano(this)">
+        <div class="plan-opt-radio"></div>
+        <div class="plan-opt-name">Básico</div>
+        <div class="plan-opt-price">R$97<span style="font-size:13px;font-family:'Geist',sans-serif;font-weight:400;color:var(--ink4)">/mês</span></div>
+        <div class="plan-opt-clients">Até 20 clientes</div>
+      </div>
+      <div class="plan-opt popular" data-plan="pro" onclick="selecionarPlano(this)">
+        <div class="plan-opt-radio"></div>
+        <div class="plan-opt-name">Profissional</div>
+        <div class="plan-opt-price">R$197<span style="font-size:13px;font-family:'Geist',sans-serif;font-weight:400;color:var(--ink4)">/mês</span></div>
+        <div class="plan-opt-clients">Até 60 clientes + IA</div>
+      </div>
+      <div class="plan-opt" data-plan="enterprise" onclick="selecionarPlano(this)">
+        <div class="plan-opt-radio"></div>
+        <div class="plan-opt-name">Enterprise</div>
+        <div class="plan-opt-price">R$397<span style="font-size:13px;font-family:'Geist',sans-serif;font-weight:400;color:var(--ink4)">/mês</span></div>
+        <div class="plan-opt-clients">Ilimitados + white-label</div>
+      </div>
+    </div>
+
+    <div id="plan-detail" style="background:var(--line2);border:1px solid var(--line);border-radius:9px;padding:13px 16px;font-size:12px;color:var(--ink3);line-height:1.7;margin-bottom:20px;"></div>
+
+    <button class="btn-primary-full" id="btn-criar-conta" onclick="criarConta()">Criar minha conta →</button>
+    <button class="btn-ghost-full" onclick="voltarPasso(2)">← Voltar</button>
+
+    <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:16px;">
+      <div style="font-size:11px;color:var(--ink4);display:flex;align-items:center;gap:5px;"><span style="color:var(--green)">✓</span> 7 dias grátis</div>
+      <div style="font-size:11px;color:var(--ink4);display:flex;align-items:center;gap:5px;"><span style="color:var(--green)">✓</span> Sem cartão</div>
+      <div style="font-size:11px;color:var(--ink4);display:flex;align-items:center;gap:5px;"><span style="color:var(--green)">✓</span> Cancele quando quiser</div>
+    </div>
+  </div>
+
+  <!-- ══ STEP 4: SUCESSO ══ -->
+  <div class="reg-step" id="step-4">
+    <div class="success-wrap">
+      <span class="success-icon">🎉</span>
+      <h2 class="success-title">Conta criada com sucesso!</h2>
+      <p class="success-sub">Seu trial começou. Você tem acesso completo por 7 dias.<br>Veja o que você pode fazer agora:</p>
+
+      <div class="success-checklist">
+        <div class="success-item"><span class="ic">✓</span> Cadastre seus primeiros clientes — ou importe via Excel</div>
+        <div class="success-item"><span class="ic">✓</span> Simule o impacto da reforma tributária para cada um</div>
+        <div class="success-item"><span class="ic">✓</span> Gere um PDF com o logo do seu escritório</div>
+        <div class="success-item"><span class="ic">✓</span> Abra o Modo Pitch na próxima reunião com cliente</div>
+      </div>
+
+      <a href="../crm/index.html" class="btn-gold-full">⚡ Acessar o TaxShift PRO →</a>
+      <p class="success-note">
+        Você será redirecionado automaticamente em <span id="countdown">5</span>s<br>
+        Em produção: <strong>app.taxshift.com.br</strong>
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Overlay simplificado para Termos/Privacidade -->
+<div id="ov-termos" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(13,14,17,.5);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:#fff;border-radius:14px;padding:32px;max-width:520px;width:100%;max-height:80vh;overflow-y:auto;position:relative;">
+    <button onclick="document.getElementById('ov-termos').style.display='none'" style="position:absolute;top:14px;right:14px;background:var(--line2);border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;color:var(--ink3);">✕</button>
+    <div style="font-family:'Instrument Serif',serif;font-size:22px;margin-bottom:16px;">Termos de Uso</div>
+    <div style="font-size:12.5px;color:var(--ink3);line-height:1.9;">
+      <p style="margin-bottom:12px;"><strong style="color:var(--ink)">1. Aceitação dos Termos</strong><br>Ao criar uma conta no TaxShift PRO, você concorda com estes Termos de Uso e nossa Política de Privacidade.</p>
+      <p style="margin-bottom:12px;"><strong style="color:var(--ink)">2. Uso da Plataforma</strong><br>O TaxShift PRO é uma ferramenta de apoio para análise e simulação tributária. Os resultados são estimativas baseadas na EC 132/2023 e PLP 68/2024, e não constituem parecer jurídico ou fiscal formal.</p>
+      <p style="margin-bottom:12px;"><strong style="color:var(--ink)">3. Propriedade dos Dados</strong><br>Os dados dos seus clientes pertencem exclusivamente ao seu escritório. Nunca compartilhamos informações entre escritórios diferentes.</p>
+      <p style="margin-bottom:12px;"><strong style="color:var(--ink)">4. Planos e Pagamentos</strong><br>Os planos são cobrados mensalmente por CNPJ do escritório. O trial de 7 dias não requer cartão de crédito. O cancelamento pode ser feito a qualquer momento, sem multa.</p>
+      <p style="font-size:11px;color:var(--ink4);">Última atualização: 19 de março de 2026 · <a href="mailto:contato@taxshift.com.br" style="color:var(--green);">contato@taxshift.com.br</a></p>
+    </div>
+  </div>
+</div>
+
+<div id="ov-privacidade" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(13,14,17,.5);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)this.style.display='none'">
+  <div style="background:#fff;border-radius:14px;padding:32px;max-width:520px;width:100%;max-height:80vh;overflow-y:auto;position:relative;">
+    <button onclick="document.getElementById('ov-privacidade').style.display='none'" style="position:absolute;top:14px;right:14px;background:var(--line2);border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;color:var(--ink3);">✕</button>
+    <div style="font-family:'Instrument Serif',serif;font-size:22px;margin-bottom:16px;">Política de Privacidade</div>
+    <div style="font-size:12.5px;color:var(--ink3);line-height:1.9;">
+      <p style="margin-bottom:12px;"><strong style="color:var(--ink)">Dados coletados</strong><br>Coletamos apenas os dados necessários: e-mail, nome, CNPJ do escritório e dados dos clientes que você cadastra.</p>
+      <p style="margin-bottom:12px;"><strong style="color:var(--ink)">Armazenamento</strong><br>Todos os dados são armazenados com criptografia AES-256. Utilizamos Row Level Security para garantir isolamento total entre escritórios.</p>
+      <p style="margin-bottom:12px;"><strong style="color:var(--ink)">Compartilhamento</strong><br>Não vendemos nem compartilhamos seus dados com terceiros.</p>
+      <p style="font-size:11px;color:var(--ink4);">Última atualização: 19 de março de 2026 · <a href="mailto:contato@taxshift.com.br" style="color:var(--green);">contato@taxshift.com.br</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"><span id="toast-msg"></span></div>
+
+<script>
+// ── PLANO INICIAL (via URL ?plano=X) ──
+var currentPlan = 'pro';
+var PLAN_DETAILS = {
+  free:       '✅ Simulador completo  ✅ Modo Pitch  ✅ Checklist básico  ✅ 5 clientes para sempre  ⚠ PDF com marca d\'água',
+  basico:     '✅ Tudo do Gratuito  ✅ PDF com logo  ✅ Até 20 clientes  ✅ Importação Excel  ✅ Alertas completos  7 dias grátis · sem cartão',
+  pro:        '✅ Tudo do Básico  ✅ IA com Claude  ✅ Painel do cliente  ✅ Até 60 clientes  ✅ Métricas avançadas  ✅ Notificações por e-mail  7 dias grátis · sem cartão',
+  enterprise: '✅ Tudo do Profissional  ✅ White-label  ✅ Múltiplos usuários  ✅ Clientes ilimitados  ✅ API de integração  ✅ Onboarding dedicado  Retorno em 24h',
+};
+var TRIAL_TEXT = {
+  free:       'Plano gratuito para sempre · sem cartão · até 5 clientes',
+  basico:     '7 dias grátis no Básico · cancele quando quiser · sem cartão',
+  pro:        '7 dias grátis no Profissional · cancele quando quiser · sem cartão',
+  enterprise: 'Plano Enterprise · retorno em até 24h úteis · reunião incluída',
+};
+
+(function initPlan(){
+  var params = new URLSearchParams(window.location.search);
+  var p = params.get('plano') || 'pro';
+  if(!PLAN_DETAILS[p]) p = 'pro';
+  currentPlan = p;
+  var trialEl = document.getElementById('trial-text');
+  if(trialEl) trialEl.textContent = TRIAL_TEXT[p] || TRIAL_TEXT.pro;
+})();
+
+// ── PROGRESS ──
+function setProgress(step){
+  for(var i=1;i<=4;i++){
+    var ps = document.getElementById('ps-'+i);
+    var pd = document.getElementById('pd-'+i);
+    ps.className = 'prog-step';
+    pd.className = 'prog-dot';
+    if(i < step){ ps.classList.add('done'); pd.classList.add('done'); pd.textContent = '✓'; }
+    else if(i === step){ ps.classList.add('active'); pd.classList.add('active'); pd.textContent = i; }
+    else { pd.textContent = i; }
+  }
+}
+
+function showStep(n){
+  document.querySelectorAll('.reg-step').forEach(function(el){ el.classList.remove('active'); });
+  var el = document.getElementById('step-'+n);
+  if(el) el.classList.add('active');
+  setProgress(n);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── STEPS ──
+function irPasso2(){
+  var nome = document.getElementById('c-nome').value.trim();
+  var email = document.getElementById('c-email').value.trim();
+  var senha = document.getElementById('c-senha').value;
+  if(!nome){ showToast('Digite seu nome para continuar.'); return; }
+  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showToast('E-mail inválido. Verifique o formato.'); return; }
+  if(senha.length < 8){ showToast('A senha deve ter pelo menos 8 caracteres.'); return; }
+  showStep(2);
+}
+
+function irPasso3(){
+  var escritorio = document.getElementById('c-escritorio').value.trim();
+  if(!escritorio){ showToast('Digite o nome do seu escritório.'); return; }
+  showStep(3);
+  // Pre-select plan from URL
+  var opts = document.querySelectorAll('.plan-opt');
+  opts.forEach(function(o){ o.classList.remove('selected'); });
+  var target = document.querySelector('[data-plan="'+currentPlan+'"]');
+  if(target){ target.classList.add('selected'); }
+  atualizarDetalhe();
+}
+
+function voltarPasso(n){ showStep(n); }
+
+function selecionarPlano(el){
+  document.querySelectorAll('.plan-opt').forEach(function(o){ o.classList.remove('selected'); });
+  el.classList.add('selected');
+  currentPlan = el.getAttribute('data-plan');
+  atualizarDetalhe();
+}
+
+function atualizarDetalhe(){
+  var det = document.getElementById('plan-detail');
+  if(det) det.innerHTML = (PLAN_DETAILS[currentPlan]||'').replace(/  /g,'<br>• ').replace(/^/,'• ');
+}
+
+function criarConta(){
+  showToast('Criando sua conta... ✓');
+  setTimeout(function(){
+    showStep(4);
+    iniciarCountdown();
+    setProgress(4);
+  }, 900);
+}
+
+function iniciarCountdown(){
+  var n = 5;
+  var el = document.getElementById('countdown');
+  var t = setInterval(function(){
+    n--;
+    if(el) el.textContent = n;
+    if(n <= 0){
+      clearInterval(t);
+      window.location.href = '../crm/index.html';
+    }
+  }, 1000);
+}
+
+// ── GOOGLE ──
+function cadastroGoogle(e){
+  e.preventDefault();
+  showToast('Conectando com Google... aguarde');
+  setTimeout(function(){ showStep(2); }, 1000);
+}
+
+// ── HELPERS ──
+function toggleSenha(id, btn){
+  var input = document.getElementById(id);
+  if(!input) return;
+  if(input.type === 'password'){ input.type = 'text'; btn.textContent = '🙈'; }
+  else { input.type = 'password'; btn.textContent = '👁'; }
+}
+
+function mascaraCNPJ(el){
+  var v = el.value.replace(/\D/g,'').substring(0,14);
+  v = v.replace(/^(\d{2})(\d)/,'$1.$2');
+  v = v.replace(/^(\d{2})\.(\d{3})(\d)/,'$1.$2.$3');
+  v = v.replace(/\.(\d{3})(\d)/,'.$1/$2');
+  v = v.replace(/(\d{4})(\d)/,'$1-$2');
+  el.value = v;
+}
+
+// Senha strength indicator
+document.getElementById('c-senha').addEventListener('input', function(){
+  var v = this.value;
+  var el = document.getElementById('senha-strength');
+  if(!v){ el.textContent=''; return; }
+  var score = 0;
+  if(v.length >= 8) score++;
+  if(/[A-Z]/.test(v)) score++;
+  if(/[0-9]/.test(v)) score++;
+  if(/[^A-Za-z0-9]/.test(v)) score++;
+  var labels = ['','Muito fraca','Fraca','Boa','Forte'];
+  var colors = ['','#dc2626','#d97706','#16a34a','#059669'];
+  el.textContent = labels[score] || '';
+  el.style.color = colors[score] || '';
+});
+
+function showToast(msg){
+  var t = document.getElementById('toast');
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 3000);
+}
+
+function abrirTermos(){
+  document.getElementById('ov-termos').style.display = 'flex';
+}
+function abrirPrivacidade(){
+  document.getElementById('ov-privacidade').style.display = 'flex';
+}
+
+// Escape key
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){
+    document.getElementById('ov-termos').style.display = 'none';
+    document.getElementById('ov-privacidade').style.display = 'none';
+  }
+});
+</script>
+</body>
+</html>
