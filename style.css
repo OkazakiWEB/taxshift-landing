@@ -161,6 +161,7 @@ nav{
   text-decoration:none;
   transition:all .2s;
   display:inline-flex;align-items:center;gap:8px;
+  cursor:pointer;touch-action:manipulation;
 }
 .btn-hero:hover{background:var(--ink2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(13,14,17,.2);}
 .btn-hero-outline{
@@ -171,6 +172,11 @@ nav{
   text-decoration:none;
   border:1.5px solid var(--line);
   transition:all .2s;
+  cursor:pointer;
+  touch-action:manipulation;
+  font-family:'Geist',sans-serif;
+  -webkit-appearance:none;
+  display:inline-flex;align-items:center;justify-content:center;
 }
 .btn-hero-outline:hover{border-color:var(--ink3);color:var(--ink);}
 .hero-note{font-size:12px;color:var(--ink4);margin-top:14px;}
