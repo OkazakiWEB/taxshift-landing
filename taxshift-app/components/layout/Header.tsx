@@ -4,9 +4,6 @@ import React, { useState, useRef, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
-import { mockAlerts } from '@/lib/mock-data'
-
-const unreadCount = mockAlerts.filter((a) => !a.read).length
 
 const pageTitles: Record<string, string> = {
   '/dashboard': 'Dashboard',
@@ -95,9 +92,6 @@ export default function Header({ onMenuToggle, user }: HeaderProps) {
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
             <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
           </svg>
-          {unreadCount > 0 && (
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#dc2626] rounded-full" />
-          )}
         </Link>
 
         {/* User dropdown */}

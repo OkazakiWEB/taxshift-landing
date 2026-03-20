@@ -1,10 +1,12 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import AppShell from '@/components/layout/AppShell'
 import LoadingSpinner from '@/components/ui/LoadingSpinner'
+import ToastNotification, { ToastType } from '@/components/ui/ToastNotification'
 import { createClient } from '@/lib/supabase/client'
+import { getProfile, updateProfile, ensureProfile, getClients, getAlerts, getDocuments, Profile } from '@/lib/db'
 
 interface User {
   id?: string
@@ -20,63 +22,122 @@ interface User {
   }
 }
 
+interface Toast {
+  message: string
+  type: ToastType
+}
+
 export default function PerfilContent({ user }: { user: User | null }) {
   const router = useRouter()
   const supabase = createClient()
 
   const meta = user?.user_metadata || {}
-  const displayName = meta.full_name || meta.name || user?.email?.split('@')[0] || 'Usuário'
+  const fallbackName = meta.full_name || meta.name || user?.email?.split('@')[0] || 'Usuário'
 
-  const initials = displayName
-    .split(' ')
-    .slice(0, 2)
-    .map((n: string) => n[0])
-    .join('')
-    .toUpperCase()
+  const [profile, setProfile] = useState<Profile | null>(null)
+  const [profileLoading, setProfileLoading] = useState(true)
+
+  // Summary stats
+  const [totalClients, setTotalClients] = useState<number | null>(null)
+  const [docsCount, setDocsCount] = useState<number | null>(null)
+  const [unreadAlertsCount, setUnreadAlertsCount] = useState<number | null>(null)
+  const [memberSince, setMemberSince] = useState<string>('—')
 
   const [form, setForm] = useState({
-    name: displayName,
-    officeName: meta.office_name || '',
-    cnpj: meta.office_cnpj || '',
-    phone: meta.phone || '',
-    address: meta.address || '',
+    full_name: fallbackName,
+    office_name: '',
+    cnpj: '',
+    phone: '',
+    address: '',
   })
 
   const [passwordForm, setPasswordForm] = useState({
-    currentPassword: '',
     newPassword: '',
     confirmPassword: '',
   })
 
   const [saving, setSaving] = useState(false)
   const [savingPassword, setSavingPassword] = useState(false)
-  const [saveSuccess, setSaveSuccess] = useState(false)
-  const [saveError, setError] = useState('')
-  const [passwordSuccess, setPasswordSuccess] = useState(false)
+  const [saveError, setSaveError] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [loggingOut, setLoggingOut] = useState(false)
+  const [toast, setToast] = useState<Toast | null>(null)
+
+  const showToast = (message: string, type: ToastType) => setToast({ message, type })
+
+  const fetchProfile = useCallback(async () => {
+    setProfileLoading(true)
+    if (user?.id && user?.email) {
+      await ensureProfile(user.id, user.email, fallbackName)
+    }
+    const data = await getProfile()
+    if (data) {
+      setProfile(data)
+      setForm({
+        full_name: data.full_name || fallbackName,
+        office_name: data.office_name || '',
+        cnpj: data.cnpj || '',
+        phone: data.phone || '',
+        address: data.address || '',
+      })
+      if (data.created_at) {
+        setMemberSince(new Date(data.created_at).toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }))
+      }
+    }
+    setProfileLoading(false)
+  }, [user, fallbackName])
+
+  const fetchStats = useCallback(async () => {
+    const [clients, alerts, docs] = await Promise.all([getClients(), getAlerts(), getDocuments()])
+    setTotalClients(clients.length)
+    setUnreadAlertsCount(alerts.filter((a) => !a.read).length)
+    // docs this month
+    const now = new Date()
+    const thisMonthDocs = docs.filter((d) => {
+      const created = new Date(d.created_at)
+      return created.getMonth() === now.getMonth() && created.getFullYear() === now.getFullYear()
+    })
+    setDocsCount(thisMonthDocs.length)
+  }, [])
+
+  useEffect(() => {
+    fetchProfile()
+    fetchStats()
+  }, [fetchProfile, fetchStats])
+
+  const displayName = form.full_name || fallbackName
+  const initials = displayName.split(' ').slice(0, 2).map((n: string) => n[0]).join('').toUpperCase()
+  const plan = profile?.plan || 'free'
+  const planLabel = plan === 'pro' ? 'PRO' : plan === 'enterprise' ? 'Enterprise' : 'Free'
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
     setSaving(true)
-    setError('')
-    setSaveSuccess(false)
+    setSaveError('')
 
-    const { error } = await supabase.auth.updateUser({
-      data: {
-        full_name: form.name,
-        office_name: form.officeName,
-        office_cnpj: form.cnpj,
-        phone: form.phone,
-        address: form.address,
-      },
+    const updated = await updateProfile({
+      full_name: form.full_name,
+      office_name: form.office_name,
+      cnpj: form.cnpj,
+      phone: form.phone,
+      address: form.address,
     })
 
-    if (error) {
-      setError(error.message)
+    if (!updated) {
+      setSaveError('Erro ao salvar. Tente novamente.')
     } else {
-      setSaveSuccess(true)
-      setTimeout(() => setSaveSuccess(false), 3000)
+      // Also update auth user metadata
+      await supabase.auth.updateUser({
+        data: {
+          full_name: form.full_name,
+          office_name: form.office_name,
+          office_cnpj: form.cnpj,
+          phone: form.phone,
+          address: form.address,
+        },
+      })
+      setProfile(updated)
+      showToast('Alterações salvas com sucesso!', 'success')
     }
     setSaving(false)
   }
@@ -84,7 +145,6 @@ export default function PerfilContent({ user }: { user: User | null }) {
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault()
     setPasswordError('')
-    setPasswordSuccess(false)
 
     if (passwordForm.newPassword.length < 6) {
       setPasswordError('A nova senha deve ter pelo menos 6 caracteres.')
@@ -96,17 +156,12 @@ export default function PerfilContent({ user }: { user: User | null }) {
     }
 
     setSavingPassword(true)
-
-    const { error } = await supabase.auth.updateUser({
-      password: passwordForm.newPassword,
-    })
-
+    const { error } = await supabase.auth.updateUser({ password: passwordForm.newPassword })
     if (error) {
       setPasswordError(error.message)
     } else {
-      setPasswordSuccess(true)
-      setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' })
-      setTimeout(() => setPasswordSuccess(false), 3000)
+      setPasswordForm({ newPassword: '', confirmPassword: '' })
+      showToast('Senha alterada com sucesso!', 'success')
     }
     setSavingPassword(false)
   }
@@ -128,6 +183,10 @@ export default function PerfilContent({ user }: { user: User | null }) {
 
   return (
     <AppShell user={user}>
+      {toast && (
+        <ToastNotification message={toast.message} type={toast.type} onDismiss={() => setToast(null)} />
+      )}
+
       <div className="mb-6">
         <h2 className="text-2xl font-serif text-[#0d0e11]">Meu Perfil</h2>
         <p className="text-sm text-[#9ca3af] mt-0.5">Gerencie suas informações e configurações de conta</p>
@@ -138,15 +197,25 @@ export default function PerfilContent({ user }: { user: User | null }) {
         <div className="lg:col-span-1 space-y-4">
           {/* Profile card */}
           <div className="bg-white border border-[#e5e7eb] rounded-xl p-6 shadow-sm text-center">
-            <div className="w-20 h-20 rounded-full bg-[#0d0e11] flex items-center justify-center mx-auto mb-4">
-              <span className="text-white text-2xl font-bold">{initials}</span>
-            </div>
-            <h3 className="text-base font-semibold text-[#0d0e11] mb-0.5">{displayName}</h3>
-            <p className="text-sm text-[#9ca3af] mb-3">{user?.email}</p>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#fefce8] border border-[#c49a2a]/30 rounded-full">
-              <span className="w-2 h-2 rounded-full bg-[#c49a2a]" />
-              <span className="text-xs font-semibold text-[#c49a2a]">Plano PRO</span>
-            </div>
+            {profileLoading ? (
+              <div className="space-y-3 animate-pulse">
+                <div className="w-20 h-20 rounded-full bg-[#f3f4f6] mx-auto" />
+                <div className="h-4 bg-[#f3f4f6] rounded w-32 mx-auto" />
+                <div className="h-3 bg-[#f3f4f6] rounded w-24 mx-auto" />
+              </div>
+            ) : (
+              <>
+                <div className="w-20 h-20 rounded-full bg-[#0d0e11] flex items-center justify-center mx-auto mb-4">
+                  <span className="text-white text-2xl font-bold">{initials}</span>
+                </div>
+                <h3 className="text-base font-semibold text-[#0d0e11] mb-0.5">{displayName}</h3>
+                <p className="text-sm text-[#9ca3af] mb-3">{user?.email}</p>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#fefce8] border border-[#c49a2a]/30 rounded-full">
+                  <span className="w-2 h-2 rounded-full bg-[#c49a2a]" />
+                  <span className="text-xs font-semibold text-[#c49a2a]">Plano {planLabel}</span>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Quick stats */}
@@ -154,10 +223,10 @@ export default function PerfilContent({ user }: { user: User | null }) {
             <h4 className="text-xs font-semibold text-[#9ca3af] uppercase tracking-wide mb-3">Resumo da conta</h4>
             <div className="space-y-3">
               {[
-                { label: 'Clientes ativos', value: '47' },
-                { label: 'Documentos este mês', value: '12' },
-                { label: 'Alertas não lidos', value: '5' },
-                { label: 'Membro desde', value: 'Jan 2025' },
+                { label: 'Clientes ativos', value: totalClients !== null ? String(totalClients) : '…' },
+                { label: 'Documentos este mês', value: docsCount !== null ? String(docsCount) : '…' },
+                { label: 'Alertas não lidos', value: unreadAlertsCount !== null ? String(unreadAlertsCount) : '…' },
+                { label: 'Membro desde', value: memberSince },
               ].map((item) => (
                 <div key={item.label} className="flex items-center justify-between">
                   <span className="text-sm text-[#6b7280]">{item.label}</span>
@@ -176,14 +245,6 @@ export default function PerfilContent({ user }: { user: User | null }) {
               <h3 className="text-sm font-semibold text-[#0d0e11]">Informações do Perfil</h3>
             </div>
             <form onSubmit={handleSave} className="p-6 space-y-4">
-              {saveSuccess && (
-                <div className="bg-[#f0fdf4] border border-[#bbf7d0] rounded-lg px-4 py-3 flex items-center gap-2">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.5">
-                    <polyline points="20 6 9 17 4 12"/>
-                  </svg>
-                  <p className="text-sm text-[#16a34a] font-medium">Alterações salvas com sucesso!</p>
-                </div>
-              )}
               {saveError && (
                 <div className="bg-[#fef2f2] border border-[#fee2e2] rounded-lg px-4 py-3">
                   <p className="text-sm text-[#dc2626]">⚠️ {saveError}</p>
@@ -195,10 +256,11 @@ export default function PerfilContent({ user }: { user: User | null }) {
                   <label className="label">Nome completo</label>
                   <input
                     type="text"
-                    value={form.name}
-                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    value={form.full_name}
+                    onChange={(e) => setForm({ ...form, full_name: e.target.value })}
                     className="input-field"
                     required
+                    disabled={profileLoading}
                   />
                 </div>
                 <div>
@@ -218,10 +280,11 @@ export default function PerfilContent({ user }: { user: User | null }) {
                   <label className="label">Nome do escritório</label>
                   <input
                     type="text"
-                    value={form.officeName}
-                    onChange={(e) => setForm({ ...form, officeName: e.target.value })}
+                    value={form.office_name}
+                    onChange={(e) => setForm({ ...form, office_name: e.target.value })}
                     placeholder="Silva & Associados"
                     className="input-field"
+                    disabled={profileLoading}
                   />
                 </div>
                 <div>
@@ -233,6 +296,7 @@ export default function PerfilContent({ user }: { user: User | null }) {
                     placeholder="00.000.000/0001-00"
                     className="input-field"
                     maxLength={18}
+                    disabled={profileLoading}
                   />
                 </div>
               </div>
@@ -246,6 +310,7 @@ export default function PerfilContent({ user }: { user: User | null }) {
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
                     placeholder="(11) 99999-9999"
                     className="input-field"
+                    disabled={profileLoading}
                   />
                 </div>
                 <div>
@@ -256,21 +321,15 @@ export default function PerfilContent({ user }: { user: User | null }) {
                     onChange={(e) => setForm({ ...form, address: e.target.value })}
                     placeholder="Rua, número, cidade - UF"
                     className="input-field"
+                    disabled={profileLoading}
                   />
                 </div>
               </div>
 
               <div className="flex justify-end pt-2">
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="btn-primary"
-                >
+                <button type="submit" disabled={saving || profileLoading} className="btn-primary">
                   {saving ? (
-                    <>
-                      <LoadingSpinner size="sm" color="white" />
-                      Salvando...
-                    </>
+                    <><LoadingSpinner size="sm" color="white" />Salvando...</>
                   ) : (
                     'Salvar alterações'
                   )}
@@ -285,20 +344,11 @@ export default function PerfilContent({ user }: { user: User | null }) {
               <h3 className="text-sm font-semibold text-[#0d0e11]">Alterar Senha</h3>
             </div>
             <form onSubmit={handlePasswordChange} className="p-6 space-y-4">
-              {passwordSuccess && (
-                <div className="bg-[#f0fdf4] border border-[#bbf7d0] rounded-lg px-4 py-3 flex items-center gap-2">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.5">
-                    <polyline points="20 6 9 17 4 12"/>
-                  </svg>
-                  <p className="text-sm text-[#16a34a] font-medium">Senha alterada com sucesso!</p>
-                </div>
-              )}
               {passwordError && (
                 <div className="bg-[#fef2f2] border border-[#fee2e2] rounded-lg px-4 py-3">
                   <p className="text-sm text-[#dc2626]">⚠️ {passwordError}</p>
                 </div>
               )}
-
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="label">Nova senha</label>
@@ -321,18 +371,10 @@ export default function PerfilContent({ user }: { user: User | null }) {
                   />
                 </div>
               </div>
-
               <div className="flex justify-end">
-                <button
-                  type="submit"
-                  disabled={savingPassword}
-                  className="btn-secondary"
-                >
+                <button type="submit" disabled={savingPassword} className="btn-secondary">
                   {savingPassword ? (
-                    <>
-                      <LoadingSpinner size="sm" />
-                      Alterando...
-                    </>
+                    <><LoadingSpinner size="sm" />Alterando...</>
                   ) : (
                     'Alterar senha'
                   )}
@@ -350,9 +392,7 @@ export default function PerfilContent({ user }: { user: User | null }) {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <p className="text-sm font-medium text-[#0d0e11]">Sair da conta</p>
-                  <p className="text-xs text-[#9ca3af] mt-0.5">
-                    Você será redirecionado para a página de login.
-                  </p>
+                  <p className="text-xs text-[#9ca3af] mt-0.5">Você será redirecionado para a página de login.</p>
                 </div>
                 <button
                   onClick={handleLogout}
@@ -363,9 +403,9 @@ export default function PerfilContent({ user }: { user: User | null }) {
                     <LoadingSpinner size="sm" color="#dc2626" />
                   ) : (
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                      <polyline points="16 17 21 12 16 7"/>
-                      <line x1="21" y1="12" x2="9" y2="12"/>
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                      <polyline points="16 17 21 12 16 7" />
+                      <line x1="21" y1="12" x2="9" y2="12" />
                     </svg>
                   )}
                   Sair da conta

@@ -2,11 +2,16 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { mockAlerts } from '@/lib/mock-data'
+import { Alert } from '@/lib/db'
+
+interface RecentAlertsProps {
+  alerts?: Alert[]
+  loading?: boolean
+}
 
 function timeAgo(dateStr: string): string {
   const date = new Date(dateStr)
-  const now = new Date('2025-03-20')
+  const now = new Date()
   const diffMs = now.getTime() - date.getTime()
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
 
@@ -23,9 +28,7 @@ const typeConfig = {
   info: { color: '#2563eb', bg: '#eff6ff', border: '#2563eb', icon: 'ℹ️' },
 }
 
-export default function RecentAlerts() {
-  const recentAlerts = mockAlerts.slice(0, 4)
-
+export default function RecentAlerts({ alerts = [], loading = false }: RecentAlertsProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
@@ -38,36 +41,48 @@ export default function RecentAlerts() {
         </Link>
       </div>
 
-      <div className="space-y-2">
-        {recentAlerts.map((alert) => {
-          const config = typeConfig[alert.type]
-          return (
-            <div
-              key={alert.id}
-              className="flex items-start gap-3 p-3 rounded-lg border border-[#f3f4f6] hover:border-[#e5e7eb] transition-colors relative"
-              style={{ borderLeftWidth: '3px', borderLeftColor: config.border }}
-            >
-              {!alert.read && (
-                <div className="absolute top-3 right-3 w-2 h-2 rounded-full bg-[#dc2626]" />
-              )}
-              <span className="text-sm flex-shrink-0">{config.icon}</span>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-medium text-[#0d0e11] leading-tight truncate pr-4">
-                  {alert.title}
-                </p>
-                <p className="text-xs text-[#6b7280] mt-0.5 line-clamp-1">
-                  {alert.description}
-                </p>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="text-xs text-[#9ca3af]">{alert.clientName}</span>
-                  <span className="text-xs text-[#e5e7eb]">·</span>
-                  <span className="text-xs text-[#9ca3af]">{timeAgo(alert.date)}</span>
+      {loading ? (
+        <div className="space-y-2">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="h-14 bg-[#f3f4f6] rounded-lg animate-pulse" />
+          ))}
+        </div>
+      ) : alerts.length === 0 ? (
+        <div className="text-center py-4">
+          <p className="text-sm text-[#9ca3af]">Nenhum alerta não lido.</p>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {alerts.map((alert) => {
+            const config = typeConfig[alert.type] || typeConfig.info
+            return (
+              <div
+                key={alert.id}
+                className="flex items-start gap-3 p-3 rounded-lg border border-[#f3f4f6] hover:border-[#e5e7eb] transition-colors relative"
+                style={{ borderLeftWidth: '3px', borderLeftColor: config.border }}
+              >
+                {!alert.read && (
+                  <div className="absolute top-3 right-3 w-2 h-2 rounded-full bg-[#dc2626]" />
+                )}
+                <span className="text-sm flex-shrink-0">{config.icon}</span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium text-[#0d0e11] leading-tight truncate pr-4">
+                    {alert.title}
+                  </p>
+                  <p className="text-xs text-[#6b7280] mt-0.5 line-clamp-1">
+                    {alert.description}
+                  </p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <span className="text-xs text-[#9ca3af]">{alert.client_name}</span>
+                    <span className="text-xs text-[#e5e7eb]">·</span>
+                    <span className="text-xs text-[#9ca3af]">{timeAgo(alert.created_at)}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          )
-        })}
-      </div>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }

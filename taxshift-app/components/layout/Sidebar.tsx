@@ -4,15 +4,11 @@ import React from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { mockAlerts } from '@/lib/mock-data'
-
-const unreadCount = mockAlerts.filter((a) => !a.read).length
 
 interface NavItem {
   href: string
   label: string
   icon: React.ReactNode
-  badge?: number
 }
 
 const navItems: NavItem[] = [
@@ -55,7 +51,6 @@ const navItems: NavItem[] = [
   {
     href: '/alertas',
     label: 'Alertas',
-    badge: unreadCount,
     icon: (
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
@@ -175,11 +170,6 @@ export default function Sidebar({ user, mobileOpen = false, onClose }: SidebarPr
                   {item.icon}
                 </span>
                 <span className="flex-1">{item.label}</span>
-                {item.badge !== undefined && item.badge > 0 && (
-                  <span className="bg-[#dc2626] text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0">
-                    {item.badge > 9 ? '9+' : item.badge}
-                  </span>
-                )}
               </Link>
             )
           })}
