@@ -650,8 +650,8 @@ footer{
   opacity:1;transform:translateY(0);
   transition:opacity .6s ease,transform .6s ease;
 }
-.fade-up.animate{opacity:0;transform:translateY(20px);}
-.fade-up.animate.visible{opacity:1;transform:translateY(0);}
+.fade-up.animate{opacity:0;transform:translateY(20px);pointer-events:none;}
+.fade-up.animate.visible{opacity:1;transform:translateY(0);pointer-events:auto;}
 
 /* ── RESPONSIVE ── */
 @media(max-width:900px){

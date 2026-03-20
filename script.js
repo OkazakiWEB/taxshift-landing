@@ -223,9 +223,11 @@ var observer = new IntersectionObserver(function (entries) {
         child.style.opacity = '0';
         child.style.transform = 'translateY(14px)';
         child.style.transition = 'opacity .45s ease, transform .45s ease';
+        child.style.pointerEvents = 'none';
         setTimeout(function () {
           child.style.opacity = '1';
           child.style.transform = 'translateY(0)';
+          child.style.pointerEvents = '';
         }, i * 70 + 80);
       });
     }
