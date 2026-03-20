@@ -20,7 +20,8 @@
 
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;font-size:16px;}
-body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+html{overflow-x:clip;}
+body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--ink);overflow-x:clip;-webkit-font-smoothing:antialiased;}
 
 /* ── SCROLLBAR ── */
 ::-webkit-scrollbar{width:4px;}
@@ -97,6 +98,7 @@ nav{
   padding:148px 0 100px;
   text-align:center;
   position:relative;
+  overflow:hidden;
 }
 .hero::before{
   content:'';
@@ -705,13 +707,17 @@ footer{
   .cta-section{padding:40px 20px;border-radius:14px;}
 }
 @media(max-width:480px){
-  .dash-preview{grid-template-columns:1fr 1fr;}
-  .hv-body{padding:12px;}
+  .hero-visual{display:none;}
+  .hero{padding:100px 0 52px;}
+  .hero h1{font-size:clamp(32px,9vw,48px);}
   .sp-logos{gap:20px;flex-wrap:wrap;}
   .hero-ctas{flex-direction:column;align-items:stretch;}
   .btn-hero,.btn-hero-outline{text-align:center;justify-content:center;}
   .wrap{padding:0 16px;}
   section{padding:52px 0;}
+  .plan-card{padding:20px 18px;}
+  .testi-card{padding:20px 18px;}
+  .faq-q{font-size:13px;}
 }
 
 /* ══ MODALS & OVERLAYS ══ */
