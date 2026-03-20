@@ -122,6 +122,12 @@ function openModal(e, type, plan) {
   if (overlay) {
     overlay.classList.add('show');
     _currentModal = id;
+    // iOS scroll lock (position:fixed trick)
+    var sy = window.scrollY;
+    document._modalScrollY = sy;
+    document.body.style.position = 'fixed';
+    document.body.style.top = '-' + sy + 'px';
+    document.body.style.width = '100%';
     document.body.style.overflow = 'hidden';
     if (type === 'demo') {
       goScreen(1);
@@ -136,7 +142,12 @@ function openPage(e, type) {
   var id = idMap[type];
   if (!id) return;
   var overlay = document.getElementById(id);
-  if (overlay) { overlay.classList.add('show'); _currentModal = id; document.body.style.overflow = 'hidden'; }
+  if (overlay) {
+    overlay.classList.add('show'); _currentModal = id;
+    var sy = window.scrollY; document._modalScrollY = sy;
+    document.body.style.position = 'fixed'; document.body.style.top = '-' + sy + 'px';
+    document.body.style.width = '100%'; document.body.style.overflow = 'hidden';
+  }
 }
 
 function closeModal(id) {
@@ -145,7 +156,13 @@ function closeModal(id) {
   if (overlay) overlay.classList.remove('show');
   if (targetId === 'modal-demo') stopDemoLoop();
   _currentModal = null;
+  // Restore iOS scroll lock
+  var sy = document._modalScrollY || 0;
+  document.body.style.position = '';
+  document.body.style.top = '';
+  document.body.style.width = '';
   document.body.style.overflow = '';
+  window.scrollTo(0, sy);
 }
 
 function closeOnOverlay(e, id) {
@@ -156,7 +173,12 @@ function switchModal(from, to) {
   closeModal(from);
   setTimeout(function () {
     var overlay = document.getElementById(to);
-    if (overlay) { overlay.classList.add('show'); _currentModal = to; document.body.style.overflow = 'hidden'; }
+    if (overlay) {
+      overlay.classList.add('show'); _currentModal = to;
+      var sy = window.scrollY; document._modalScrollY = sy;
+      document.body.style.position = 'fixed'; document.body.style.top = '-' + sy + 'px';
+      document.body.style.width = '100%'; document.body.style.overflow = 'hidden';
+    }
   }, 200);
 }
 

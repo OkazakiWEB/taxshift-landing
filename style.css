@@ -699,11 +699,28 @@ footer{
     height:auto;
   }
   .demo-sidebar-mock{display:none;}
-  .demo-content-mock{height:400px;overflow-y:auto;}
+  .demo-content-mock{height:360px;overflow-y:auto;}
   .hero-visual{border-radius:10px;}
   .hv-body{padding:16px;}
   .modal-box{padding:24px 20px;}
   .cta-section{padding:40px 20px;border-radius:14px;}
+  /* Demo modal full-screen no mobile */
+  #modal-demo{padding:0;}
+  #modal-demo .modal-box{
+    max-width:100% !important;
+    width:100%;
+    height:100vh;
+    max-height:100vh;
+    border-radius:0 !important;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+  }
+  #modal-demo .demo-body{
+    flex:1;
+    height:auto;
+    min-height:0;
+  }
 }
 @media(max-width:480px){
   .hero-visual{display:none;}
@@ -721,7 +738,7 @@ footer{
 
 /* ══ MODALS & OVERLAYS ══ */
 .overlay{
-  position:fixed;inset:0;z-index:200;
+  position:fixed;inset:0;z-index:500;
   background:rgba(13,14,17,.6);
   backdrop-filter:blur(6px);
   display:flex;align-items:center;justify-content:center;
@@ -880,7 +897,7 @@ footer{
 
 /* ══ TOAST ══ */
 .toast{
-  position:fixed;bottom:24px;right:24px;z-index:300;
+  position:fixed;bottom:24px;right:24px;z-index:600;
   background:var(--ink);color:var(--white);
   padding:12px 18px;border-radius:9px;
   font-size:13px;font-weight:500;
