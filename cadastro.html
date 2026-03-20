@@ -121,6 +121,26 @@ body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--ink);min-he
   background:none;border:none;cursor:pointer;color:var(--ink4);font-size:14px;
 }
 
+/* ── BILLING TOGGLE ── */
+.billing-toggle{
+  display:inline-flex;align-items:center;
+  background:var(--line2);border:1px solid var(--line);
+  border-radius:20px;padding:3px;
+  margin-bottom:16px;
+}
+.billing-toggle button{
+  padding:5px 16px;border-radius:16px;border:none;
+  font-family:'Geist',sans-serif;font-size:12px;font-weight:600;
+  cursor:pointer;transition:all .2s;background:transparent;color:var(--ink3);
+}
+.billing-toggle button.active{background:var(--ink);color:#fff;}
+.billing-save-badge{
+  display:inline-block;margin-left:8px;
+  font-size:10px;font-weight:700;color:var(--green);
+  background:var(--green-bg);border:1px solid #bbf7d0;
+  border-radius:10px;padding:1px 7px;vertical-align:middle;
+}
+
 /* ── PLAN CARDS ── */
 .plan-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;}
 @media(max-width:500px){.plan-opts{grid-template-columns:1fr;}}
@@ -354,6 +374,13 @@ body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--ink);min-he
       <p class="step-sub">Comece grátis. Faça upgrade quando precisar. Sem compromisso.</p>
     </div>
 
+    <div style="text-align:center;">
+      <div class="billing-toggle">
+        <button id="btog-mensal" class="active" onclick="setBillingCadastro('mensal')">Mensal</button>
+        <button id="btog-anual" onclick="setBillingCadastro('anual')">Anual <span class="billing-save-badge">-20%</span></button>
+      </div>
+    </div>
+
     <div class="plan-opts" id="plan-opts">
       <div class="plan-opt" data-plan="free" onclick="selecionarPlano(this)">
         <div class="plan-opt-radio"></div>
@@ -364,20 +391,20 @@ body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--ink);min-he
       <div class="plan-opt" data-plan="basico" onclick="selecionarPlano(this)">
         <div class="plan-opt-radio"></div>
         <div class="plan-opt-name">Básico</div>
-        <div class="plan-opt-price">R$97<span style="font-size:13px;font-family:'Geist',sans-serif;font-weight:400;color:var(--ink4)">/mês</span></div>
-        <div class="plan-opt-clients">Até 20 clientes</div>
+        <div class="plan-opt-price">R$<span id="cad-price-basico">97</span><span style="font-size:13px;font-family:'Geist',sans-serif;font-weight:400;color:var(--ink4)">/mês</span></div>
+        <div class="plan-opt-clients" id="cad-period-basico">Até 20 clientes</div>
       </div>
       <div class="plan-opt popular" data-plan="pro" onclick="selecionarPlano(this)">
         <div class="plan-opt-radio"></div>
         <div class="plan-opt-name">Profissional</div>
-        <div class="plan-opt-price">R$197<span style="font-size:13px;font-family:'Geist',sans-serif;font-weight:400;color:var(--ink4)">/mês</span></div>
-        <div class="plan-opt-clients">Até 60 clientes + IA</div>
+        <div class="plan-opt-price">R$<span id="cad-price-pro">197</span><span style="font-size:13px;font-family:'Geist',sans-serif;font-weight:400;color:var(--ink4)">/mês</span></div>
+        <div class="plan-opt-clients" id="cad-period-pro">Até 60 clientes + IA</div>
       </div>
       <div class="plan-opt" data-plan="enterprise" onclick="selecionarPlano(this)">
         <div class="plan-opt-radio"></div>
         <div class="plan-opt-name">Enterprise</div>
-        <div class="plan-opt-price">R$397<span style="font-size:13px;font-family:'Geist',sans-serif;font-weight:400;color:var(--ink4)">/mês</span></div>
-        <div class="plan-opt-clients">Ilimitados + white-label</div>
+        <div class="plan-opt-price">R$<span id="cad-price-ent">397</span><span style="font-size:13px;font-family:'Geist',sans-serif;font-weight:400;color:var(--ink4)">/mês</span></div>
+        <div class="plan-opt-clients" id="cad-period-ent">Ilimitados + white-label</div>
       </div>
     </div>
 
@@ -449,6 +476,27 @@ body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--ink);min-he
 <div class="toast" id="toast"><span id="toast-msg"></span></div>
 
 <script>
+// ── BILLING TOGGLE ──
+var currentBilling = 'mensal';
+var CAD_PRICES = {
+  mensal: { basico: 97,  pro: 197,  ent: 397 },
+  anual:  { basico: 78,  pro: 158,  ent: 318 }
+};
+
+function setBillingCadastro(type) {
+  currentBilling = type;
+  var p = CAD_PRICES[type];
+  document.getElementById('cad-price-basico').textContent = p.basico;
+  document.getElementById('cad-price-pro').textContent    = p.pro;
+  document.getElementById('cad-price-ent').textContent    = p.ent;
+  var period = type === 'anual' ? 'cobrado anualmente' : '';
+  document.getElementById('cad-period-basico').textContent = 'Até 20 clientes' + (period ? ' · ' + period : '');
+  document.getElementById('cad-period-pro').textContent    = 'Até 60 clientes + IA' + (period ? ' · ' + period : '');
+  document.getElementById('cad-period-ent').textContent    = 'Ilimitados + white-label' + (period ? ' · ' + period : '');
+  document.getElementById('btog-mensal').className = type === 'mensal' ? 'active' : '';
+  document.getElementById('btog-anual').className  = type === 'anual'  ? 'active' : '';
+}
+
 // ── PLANO INICIAL (via URL ?plano=X) ──
 var currentPlan = 'pro';
 var PLAN_DETAILS = {
