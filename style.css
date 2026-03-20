@@ -740,21 +740,24 @@ footer{
   section{padding:64px 0;}
   .faq-grid{grid-template-columns:1fr;gap:32px;}
 }
+/* Demo modal: hide sidebar and go full-screen on medium viewports */
+@media(max-width:800px){
+  #modal-demo{padding:0;}
+  .dm-shell{
+    height:100dvh !important;max-height:100dvh !important;
+    border-radius:0 !important;border:none;
+  }
+  .dm-sb{display:none;}
+  .dm-topbar{padding:12px 14px;}
+  .dm-content .demo-screen{overflow-y:auto;}
+  .dm-footer-note{display:none;}
+}
 @media(max-width:640px){
   .plans-grid-wrap{grid-template-columns:1fr;}
   .hero-visual{border-radius:10px;}
   .hv-body{padding:16px;}
   .modal-box{padding:24px 20px;}
   .cta-section{padding:40px 20px;border-radius:14px;}
-  /* Demo modal full-screen no mobile */
-  #modal-demo{padding:0;}
-  .dm-shell{
-    height:100dvh !important;max-height:100dvh !important;
-    border-radius:0 !important;border:none;flex-direction:column;
-  }
-  .dm-sb{display:none;}
-  .dm-topbar{padding:12px 14px;}
-  .dm-content .demo-screen{overflow-y:auto;}
 }
 @media(max-width:480px){
   .hero-visual{display:none;}
