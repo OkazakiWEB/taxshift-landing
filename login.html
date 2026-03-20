@@ -279,6 +279,11 @@ const _sb = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxbWl4a3BycGNuYnFyeWlsbXpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwMTAxMTUsImV4cCI6MjA4OTU4NjExNX0.nHgXL_E6aCwOaS_7KLq4tWlNCy0pC8bNpBWHoZFxDD4'
 );
 
+// Redireciona se já estiver logado
+_sb.auth.getSession().then(function(res){
+  if(res.data.session) window.location.href = 'https://app.taxshift.com.br';
+});
+
 // Mobile logo
 if(window.innerWidth <= 860){
   document.getElementById('mobile-logo').style.display = 'block';

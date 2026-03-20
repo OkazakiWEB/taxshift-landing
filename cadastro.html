@@ -422,23 +422,32 @@ body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--ink);min-he
 
   <!-- ══ STEP 4: SUCESSO ══ -->
   <div class="reg-step" id="step-4">
-    <div class="success-wrap">
+    <!-- Confirmação de e-mail pendente -->
+    <div class="success-wrap" id="step4-confirm" style="display:none;">
+      <span class="success-icon">📧</span>
+      <h2 class="success-title">Confirme seu e-mail</h2>
+      <p class="success-sub">Enviamos um link de confirmação para <strong id="confirm-email"></strong>.<br>Clique no link para ativar sua conta e acessar o TaxShift PRO.</p>
+      <div class="success-checklist">
+        <div class="success-item"><span class="ic">✓</span> Verifique sua caixa de entrada (e o spam)</div>
+        <div class="success-item"><span class="ic">✓</span> Clique no link "Confirmar e-mail"</div>
+        <div class="success-item"><span class="ic">✓</span> Você será redirecionado para o app automaticamente</div>
+      </div>
+      <a href="https://app.taxshift.com.br" class="btn-gold-full">⚡ Já confirmei — Acessar →</a>
+    </div>
+
+    <!-- Acesso imediato (Google OAuth ou e-mail confirmado) -->
+    <div class="success-wrap" id="step4-ok">
       <span class="success-icon">🎉</span>
       <h2 class="success-title">Conta criada com sucesso!</h2>
       <p class="success-sub">Seu trial começou. Você tem acesso completo por 7 dias.<br>Veja o que você pode fazer agora:</p>
-
       <div class="success-checklist">
         <div class="success-item"><span class="ic">✓</span> Cadastre seus primeiros clientes — ou importe via Excel</div>
         <div class="success-item"><span class="ic">✓</span> Simule o impacto da reforma tributária para cada um</div>
         <div class="success-item"><span class="ic">✓</span> Gere um PDF com o logo do seu escritório</div>
         <div class="success-item"><span class="ic">✓</span> Abra o Modo Pitch na próxima reunião com cliente</div>
       </div>
-
       <a href="https://app.taxshift.com.br" class="btn-gold-full">⚡ Acessar o TaxShift PRO →</a>
-      <p class="success-note">
-        Você será redirecionado automaticamente em <span id="countdown">5</span>s<br>
-        Em produção: <strong>app.taxshift.com.br</strong>
-      </p>
+      <p class="success-note">Redirecionando em <span id="countdown">5</span>s</p>
     </div>
   </div>
 
@@ -625,8 +634,18 @@ async function criarConta(){
   }
 
   showStep(4);
-  iniciarCountdown();
   setProgress(4);
+
+  // Supabase retorna session=null quando confirmar e-mail é obrigatório
+  if(!data.session){
+    document.getElementById('step4-ok').style.display = 'none';
+    document.getElementById('step4-confirm').style.display = 'block';
+    document.getElementById('confirm-email').textContent = email;
+  } else {
+    document.getElementById('step4-confirm').style.display = 'none';
+    document.getElementById('step4-ok').style.display = 'block';
+    iniciarCountdown();
+  }
 }
 
 function traduzirErro(msg){
