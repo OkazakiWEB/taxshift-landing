@@ -217,6 +217,7 @@ var observer = new IntersectionObserver(function (entries) {
   entries.forEach(function (entry) {
     if (entry.isIntersecting) {
       entry.target.classList.add('visible');
+      observer.unobserve(entry.target); // animate only once
       var children = entry.target.querySelectorAll('.feat-card,.prob-item,.hiw-step,.plan-card,.testi-card');
       children.forEach(function (child, i) {
         child.style.transitionDelay = (i * 0.07) + 's';
@@ -234,11 +235,17 @@ var observer = new IntersectionObserver(function (entries) {
   });
 }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
 
-// Add animate class after brief delay so above-fold content shows immediately
+// Add animate class and observe; skip elements already above the fold
 setTimeout(function() {
   document.querySelectorAll('.fade-up').forEach(function (el) {
-    el.classList.add('animate');
-    observer.observe(el);
+    var rect = el.getBoundingClientRect();
+    if (rect.bottom < 0) {
+      // Already scrolled past — show immediately without animation
+      el.classList.add('visible');
+    } else {
+      el.classList.add('animate');
+      observer.observe(el);
+    }
   });
 }, 100);
 
