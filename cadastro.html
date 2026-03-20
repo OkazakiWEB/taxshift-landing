@@ -475,7 +475,14 @@ body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--ink);min-he
 <!-- Toast -->
 <div class="toast" id="toast"><span id="toast-msg"></span></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const { createClient } = window.supabase;
+const _sb = createClient(
+  'https://cqmixkprpcnbqryilmzn.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxbWl4a3BycGNuYnFyeWlsbXpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwMTAxMTUsImV4cCI6MjA4OTU4NjExNX0.nHgXL_E6aCwOaS_7KLq4tWlNCy0pC8bNpBWHoZFxDD4'
+);
+
 // ── BILLING TOGGLE ──
 var currentBilling = 'mensal';
 var CAD_PRICES = {
@@ -579,13 +586,54 @@ function atualizarDetalhe(){
   if(det) det.innerHTML = (PLAN_DETAILS[currentPlan]||'').replace(/  /g,'<br>• ').replace(/^/,'• ');
 }
 
-function criarConta(){
-  showToast('Criando sua conta... ✓');
-  setTimeout(function(){
-    showStep(4);
-    iniciarCountdown();
-    setProgress(4);
-  }, 900);
+async function criarConta(){
+  var nome      = document.getElementById('c-nome').value.trim();
+  var sobrenome = document.getElementById('c-sobrenome').value.trim();
+  var email     = document.getElementById('c-email').value.trim();
+  var senha     = document.getElementById('c-senha').value;
+  var escritorio= document.getElementById('c-escritorio').value.trim();
+  var cnpj      = document.getElementById('c-cnpj').value.trim();
+  var crc       = document.getElementById('c-crc').value.trim();
+  var plano     = currentPlan;
+  var billing   = currentBilling;
+
+  var btn = document.getElementById('btn-criar-conta');
+  btn.textContent = 'Criando conta...';
+  btn.disabled = true;
+
+  const { data, error } = await _sb.auth.signUp({
+    email: email,
+    password: senha,
+    options: {
+      data: {
+        full_name:  nome + (sobrenome ? ' ' + sobrenome : ''),
+        escritorio: escritorio,
+        cnpj:       cnpj,
+        crc:        crc,
+        plano:      plano,
+        billing:    billing
+      },
+      emailRedirectTo: 'https://app.taxshift.com.br'
+    }
+  });
+
+  if(error){
+    btn.textContent = 'Criar minha conta →';
+    btn.disabled = false;
+    showToast('Erro: ' + traduzirErro(error.message));
+    return;
+  }
+
+  showStep(4);
+  iniciarCountdown();
+  setProgress(4);
+}
+
+function traduzirErro(msg){
+  if(msg.includes('User already registered')) return 'Este e-mail já está cadastrado. Faça login.';
+  if(msg.includes('Password should be'))      return 'A senha deve ter pelo menos 6 caracteres.';
+  if(msg.includes('Unable to validate'))      return 'E-mail inválido. Verifique o formato.';
+  return 'Tente novamente em instantes.';
 }
 
 function iniciarCountdown(){
@@ -602,10 +650,14 @@ function iniciarCountdown(){
 }
 
 // ── GOOGLE ──
-function cadastroGoogle(e){
+async function cadastroGoogle(e){
   e.preventDefault();
-  showToast('Conectando com Google... aguarde');
-  setTimeout(function(){ showStep(2); }, 1000);
+  showToast('Redirecionando para o Google...');
+  const { error } = await _sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: 'https://app.taxshift.com.br' }
+  });
+  if(error) showToast('Erro ao conectar com Google. Tente novamente.');
 }
 
 // ── HELPERS ──

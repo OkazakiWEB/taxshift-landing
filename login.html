@@ -271,7 +271,14 @@ body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--ink);displa
 <!-- Toast -->
 <div class="toast" id="toast"><span id="toast-msg">Mensagem</span></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const { createClient } = window.supabase;
+const _sb = createClient(
+  'https://cqmixkprpcnbqryilmzn.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxbWl4a3BycGNuYnFyeWlsbXpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwMTAxMTUsImV4cCI6MjA4OTU4NjExNX0.nHgXL_E6aCwOaS_7KLq4tWlNCy0pC8bNpBWHoZFxDD4'
+);
+
 // Mobile logo
 if(window.innerWidth <= 860){
   document.getElementById('mobile-logo').style.display = 'block';
@@ -284,44 +291,76 @@ function showToast(msg){
   setTimeout(function(){ t.classList.remove('show'); }, 3200);
 }
 
+function showError(msg){
+  var el = document.getElementById('login-error');
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+function hideError(){
+  document.getElementById('login-error').classList.remove('show');
+}
+
 function toggleSenha(id, btn){
   var input = document.getElementById(id);
   if(input.type === 'password'){ input.type = 'text'; btn.textContent = '🙈'; }
   else { input.type = 'password'; btn.textContent = '👁'; }
 }
 
-function loginGoogle(e){
-  e.preventDefault();
-  showToast('Conectando com Google... aguarde');
-  setTimeout(function(){ window.location.href = 'https://app.taxshift.com.br'; }, 1200);
+function traduzirErro(msg){
+  if(msg.includes('Invalid login credentials')) return 'E-mail ou senha incorretos. Verifique os dados e tente novamente.';
+  if(msg.includes('Email not confirmed'))       return 'Confirme seu e-mail antes de entrar. Verifique sua caixa de entrada.';
+  if(msg.includes('Too many requests'))         return 'Muitas tentativas. Aguarde alguns minutos e tente novamente.';
+  return 'Erro ao entrar. Tente novamente.';
 }
 
-function fazerLogin(){
+async function loginGoogle(e){
+  e.preventDefault();
+  hideError();
+  showToast('Redirecionando para o Google...');
+  const { error } = await _sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: 'https://app.taxshift.com.br' }
+  });
+  if(error) showError('Erro ao conectar com Google. Tente novamente.');
+}
+
+async function fazerLogin(){
   var email = document.getElementById('login-email').value.trim();
   var senha = document.getElementById('login-senha').value;
-  var errEl = document.getElementById('login-error');
+  hideError();
 
-  if(!email || !senha){
-    errEl.textContent = 'Preencha o e-mail e a senha para continuar.';
-    errEl.classList.add('show');
+  if(!email || !senha){ showError('Preencha o e-mail e a senha para continuar.'); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showError('E-mail inválido. Verifique o formato.'); return; }
+
+  var btn = document.querySelector('.auth-btn');
+  btn.textContent = 'Entrando...';
+  btn.disabled = true;
+
+  const { data, error } = await _sb.auth.signInWithPassword({ email: email, password: senha });
+
+  if(error){
+    btn.textContent = 'Entrar →';
+    btn.disabled = false;
+    showError(traduzirErro(error.message));
     return;
   }
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
-    errEl.textContent = 'E-mail inválido. Verifique o formato.';
-    errEl.classList.add('show');
-    return;
-  }
 
-  errEl.classList.remove('show');
-  showToast('Autenticando... ✓');
-  setTimeout(function(){ window.location.href = 'https://app.taxshift.com.br'; }, 900);
+  showToast('Bem-vindo de volta! ✓');
+  setTimeout(function(){ window.location.href = 'https://app.taxshift.com.br'; }, 800);
 }
 
-function esqueceuSenha(e){
+async function esqueceuSenha(e){
   e.preventDefault();
   var email = document.getElementById('login-email').value.trim();
-  if(email){ showToast('E-mail de recuperação enviado para ' + email + ' 📧'); }
-  else { showToast('Digite seu e-mail acima e tente novamente 📧'); }
+  if(!email){ showToast('Digite seu e-mail acima primeiro 📧'); return; }
+
+  const { error } = await _sb.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://www.taxshift.com.br/login.html'
+  });
+
+  if(error){ showToast('Erro ao enviar e-mail. Tente novamente.'); return; }
+  showToast('E-mail de recuperação enviado para ' + email + ' 📧');
 }
 
 // Enter key
