@@ -2,15 +2,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useApp } from '@/context/AppContext'
 
-const navItems = [
-  { icon: '⊞', label: 'Painel' },
-  { icon: '📊', label: 'Métricas' },
-  { icon: '🏢', label: 'Empresa/PJ' },
-  { icon: '✓', label: 'Checklist' },
-  { icon: '🔔', label: 'Alertas' },
-  { icon: '🧮', label: 'Cálculos' },
-  { icon: '📄', label: 'Relatório' },
-]
 
 const clients = [
   { name: 'Tech Solutions Ltda', regime: 'LP', impact: '+22.4%', risk: 'Alto', color: 'text-red' },
@@ -23,7 +14,7 @@ const clients = [
 export default function DemoModal() {
   const { modal, closeModal, openModal } = useApp()
   const [activeScreen, setActiveScreen] = useState(0)
-  const [activeNav, setActiveNav] = useState(0)
+
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const isOpen = modal === 'demo'
@@ -39,10 +30,7 @@ export default function DemoModal() {
   }, [isOpen])
 
   useEffect(() => {
-    if (!isOpen) {
-      setActiveScreen(0)
-      setActiveNav(0)
-    }
+    if (!isOpen) setActiveScreen(0)
   }, [isOpen])
 
   const goToScreen = (i: number) => {
@@ -66,49 +54,6 @@ export default function DemoModal() {
         style={{ maxWidth: '900px' }}
       >
         <div className="flex h-full sm:h-[600px]">
-          {/* Sidebar (hidden on mobile) */}
-          <aside
-            className="hidden md:flex flex-col w-48 shrink-0 border-r border-line bg-bg"
-          >
-            {/* Logo */}
-            <div className="px-5 py-4 border-b border-line">
-              <div className="font-serif text-base text-ink">
-                Tax<span className="text-gold">Shift</span>
-                <span className="text-xs text-ink4 font-sans ml-1">PRO</span>
-              </div>
-            </div>
-            {/* Nav */}
-            <nav className="flex-1 py-3 overflow-y-auto">
-              {navItems.map((item, i) => (
-                <button
-                  key={item.label}
-                  onClick={() => { setActiveNav(i); goToScreen(Math.min(i, 3)) }}
-                  className={`w-full flex items-center gap-2.5 px-4 py-2.5 text-xs transition-all duration-150 text-left ${
-                    activeNav === i
-                      ? 'bg-white text-ink font-semibold shadow-sm rounded-lg mx-2 w-auto'
-                      : 'text-ink3 hover:text-ink'
-                  }`}
-                  style={activeNav === i ? { margin: '0 8px', width: 'calc(100% - 16px)' } : {}}
-                >
-                  <span>{item.icon}</span>
-                  <span>{item.label}</span>
-                </button>
-              ))}
-            </nav>
-            {/* User */}
-            <div className="px-4 py-3 border-t border-line">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 rounded-full bg-gold flex items-center justify-center text-xs font-bold text-white">
-                  S
-                </div>
-                <div>
-                  <p className="text-xs font-medium text-ink">Santos & Ass.</p>
-                  <p className="text-xs text-ink4">Demo</p>
-                </div>
-              </div>
-            </div>
-          </aside>
-
           {/* Main Content */}
           <div className="flex-1 flex flex-col overflow-hidden">
             {/* Topbar */}
