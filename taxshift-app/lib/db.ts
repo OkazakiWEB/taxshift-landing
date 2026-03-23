@@ -445,3 +445,102 @@ export async function ensureProfile(
     console.error('[db] ensureProfile unexpected error:', err)
   }
 }
+
+// ─── Checklist ────────────────────────────────────────────────────────────────
+
+export interface ChecklistTemplate {
+  id: string
+  category: string
+  title: string
+  description: string | null
+  priority: 'low' | 'medium' | 'high' | 'critical'
+  phase: string | null
+  applicable_regimes: string[] | null
+  sort_order: number
+}
+
+export interface ChecklistItem {
+  id: string
+  user_id: string
+  client_id: string | null
+  template_id: string | null
+  category: string
+  title: string
+  description: string
+  priority: 'low' | 'medium' | 'high' | 'critical'
+  status: 'pending' | 'in_progress' | 'done' | 'not_applicable'
+  phase: string
+  due_date: string | null
+  notes: string
+  completed_at: string | null
+  created_at: string
+  updated_at: string
+}
+
+export async function getChecklistItems(clientId?: string): Promise<ChecklistItem[]> {
+  try {
+    const supabase = createClient()
+    let query = supabase
+      .from('checklist_items')
+      .select('*')
+      .order('created_at', { ascending: true })
+
+    if (clientId) {
+      query = query.eq('client_id', clientId)
+    }
+
+    const { data, error } = await query
+
+    if (error) {
+      console.error('[db] getChecklistItems error:', error.message)
+      return []
+    }
+    return (data ?? []) as ChecklistItem[]
+  } catch (err) {
+    console.error('[db] getChecklistItems unexpected error:', err)
+    return []
+  }
+}
+
+export async function updateChecklistItem(
+  id: string,
+  data: Partial<ChecklistItem>
+): Promise<ChecklistItem | null> {
+  try {
+    const supabase = createClient()
+    const { data: updated, error } = await supabase
+      .from('checklist_items')
+      .update({ ...data, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) {
+      console.error('[db] updateChecklistItem error:', error.message)
+      return null
+    }
+    return updated as ChecklistItem
+  } catch (err) {
+    console.error('[db] updateChecklistItem unexpected error:', err)
+    return null
+  }
+}
+
+export async function getChecklistTemplates(): Promise<ChecklistTemplate[]> {
+  try {
+    const supabase = createClient()
+    const { data, error } = await supabase
+      .from('checklist_templates')
+      .select('*')
+      .order('sort_order', { ascending: true })
+
+    if (error) {
+      console.error('[db] getChecklistTemplates error:', error.message)
+      return []
+    }
+    return (data ?? []) as ChecklistTemplate[]
+  } catch (err) {
+    console.error('[db] getChecklistTemplates unexpected error:', err)
+    return []
+  }
+}

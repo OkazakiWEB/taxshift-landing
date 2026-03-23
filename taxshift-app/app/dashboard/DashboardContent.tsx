@@ -7,7 +7,7 @@ import TaxImpactChart from '@/components/dashboard/TaxImpactChart'
 import QuickActions from '@/components/dashboard/QuickActions'
 import Badge from '@/components/ui/Badge'
 import Link from 'next/link'
-import { getClients, getAlerts, getDocuments, Client, Alert } from '@/lib/db'
+import { getClients, getAlerts, getDocuments, getChecklistItems, Client, Alert, ChecklistItem } from '@/lib/db'
 
 interface User {
   id?: string
@@ -94,17 +94,21 @@ export default function DashboardContent({ user }: DashboardContentProps) {
 
   const [clients, setClients] = useState<Client[]>([])
   const [alerts, setAlerts] = useState<Alert[]>([])
+  const [checklistItems, setChecklistItems] = useState<ChecklistItem[]>([])
   const [loading, setLoading] = useState(true)
 
   const fetchAll = useCallback(async () => {
     setLoading(true)
-    const [clientsData, alertsData] = await Promise.all([
+    const [clientsData, alertsData, checklistData] = await Promise.all([
       getClients(),
       getAlerts(),
-      getDocuments(),
+      getChecklistItems(),
     ])
+    // We still call getDocuments to keep existing behavior but discard result
+    getDocuments()
     setClients(clientsData)
     setAlerts(alertsData)
+    setChecklistItems(checklistData)
     setLoading(false)
   }, [])
 
@@ -123,6 +127,12 @@ export default function DashboardContent({ user }: DashboardContentProps) {
             clients.length
         )
       : 0
+
+  // Checklist stats
+  const totalChecklistItems = checklistItems.length
+  const doneChecklistItems = checklistItems.filter((i) => i.status === 'done').length
+  const checklistPct = totalChecklistItems > 0 ? Math.round((doneChecklistItems / totalChecklistItems) * 100) : 0
+  const criticalPending = checklistItems.filter((i) => i.priority === 'critical' && i.status !== 'done').length
 
   const recentClients = [...clients]
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
@@ -348,6 +358,68 @@ export default function DashboardContent({ user }: DashboardContentProps) {
           {/* Quick Actions */}
           <div className="bg-white border border-[#e5e7eb] rounded-xl p-5 shadow-sm">
             <QuickActions />
+          </div>
+
+          {/* Checklist progress widget */}
+          <div className="bg-white border border-[#e5e7eb] rounded-xl p-5 shadow-sm">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-semibold text-[#0d0e11]">Checklist da Reforma</h3>
+              <Link href="/checklist" className="text-xs text-[#c49a2a] hover:text-[#b8881f] font-medium transition-colors">
+                Ver detalhes →
+              </Link>
+            </div>
+
+            {loading ? (
+              <div className="space-y-3">
+                <div className="h-4 bg-[#f3f4f6] rounded animate-pulse w-full" />
+                <div className="h-3 bg-[#f3f4f6] rounded animate-pulse w-2/3" />
+              </div>
+            ) : totalChecklistItems === 0 ? (
+              <div className="text-center py-3">
+                <p className="text-xs text-[#9ca3af] mb-3">
+                  Nenhuma tarefa ainda. Inicialize o checklist para começar.
+                </p>
+                <Link
+                  href="/checklist"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#c49a2a] text-white text-xs font-semibold hover:bg-[#b8881f] transition-colors"
+                >
+                  ✅ Inicializar checklist
+                </Link>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-[#6b7280] font-medium">Progresso geral</span>
+                  <span className="font-bold text-[#0d0e11]">{checklistPct}%</span>
+                </div>
+                <div className="w-full bg-[#f3f4f6] rounded-full h-2.5">
+                  <div
+                    className="h-2.5 rounded-full transition-all"
+                    style={{
+                      width: `${checklistPct}%`,
+                      backgroundColor: checklistPct >= 80 ? '#16a34a' : checklistPct >= 40 ? '#c49a2a' : '#dc2626',
+                    }}
+                  />
+                </div>
+                <div className="flex items-center justify-between text-xs text-[#9ca3af]">
+                  <span>{doneChecklistItems} de {totalChecklistItems} tarefas concluídas</span>
+                </div>
+                {criticalPending > 0 && (
+                  <div className="flex items-center gap-2 bg-[#fef2f2] border border-red-200 rounded-lg px-3 py-2">
+                    <span className="text-[#dc2626] text-sm">🔴</span>
+                    <p className="text-xs font-semibold text-[#dc2626]">
+                      {criticalPending} tarefa{criticalPending !== 1 ? 's' : ''} crítica{criticalPending !== 1 ? 's' : ''} pendente{criticalPending !== 1 ? 's' : ''}
+                    </p>
+                  </div>
+                )}
+                <Link
+                  href="/checklist"
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-[#c49a2a] hover:text-[#b8881f] transition-colors"
+                >
+                  Ver todas as tarefas →
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Reform info banner */}
