@@ -35,6 +35,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background-color 0.2s ease;
+    scroll-behavior: smooth;
   }
 
   html.modal-open {
@@ -178,6 +179,20 @@
   }
 }
 
+/* Anchor scroll offset for sticky nav */
+[id] {
+  scroll-margin-top: 72px;
+}
+
+/* FAQ accordion — remove default triangle */
+details > summary {
+  list-style: none;
+  cursor: pointer;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 4px;
@@ -241,6 +256,63 @@ button, a {
 
 .fade-in {
   animation: fadeIn 0.3s ease forwards;
+}
+
+/* ── Print / PDF export ────────────────────────────────────────────────────── */
+
+.no-print { display: revert; }
+.print-only { display: none; }
+
+@media print {
+  @page {
+    margin: 18mm 20mm;
+    size: A4 portrait;
+  }
+
+  /* Hide shell chrome */
+  aside,
+  header,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Remove sidebar offset */
+  .lg\:ml-56 {
+    margin-left: 0 !important;
+  }
+
+  /* Reset background */
+  html, body {
+    background: white !important;
+    font-size: 11pt;
+    color: #0d0e11;
+  }
+
+  /* Remove shadows and decorative borders */
+  .shadow-sm, .shadow-md, .shadow-lg { box-shadow: none !important; }
+
+  /* Show print-only header */
+  .print-only { display: block !important; }
+
+  /* Keep cards legible — force white background */
+  .bg-white,
+  [class*="bg-[#fafaf8]"],
+  [class*="bg-[#f3f4f6]"] {
+    background: white !important;
+  }
+
+  /* Avoid page breaks inside cards */
+  .rounded-xl { page-break-inside: avoid; }
+
+  /* Tables: repeat header on each page */
+  thead { display: table-header-group; }
+  tr { page-break-inside: avoid; }
+}
+
+/* Modal entry animation */
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.96) translateY(12px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);     }
 }
 
 /* Table styles */
